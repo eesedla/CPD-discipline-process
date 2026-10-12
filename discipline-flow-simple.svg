@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1270" height="377" viewBox="0 0 1270 377">
+<title>Police discipline — the five stages</title>
+<g id="Background"><rect x="0" y="0" width="1270" height="377" fill="#ffffff"/></g>
+<g id="Title">
+<rect x="48" y="52" width="9" height="9" fill="#f4c913"/>
+<text x="66" y="61" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="12" font-weight="700" fill="#404f54" text-anchor="start" letter-spacing="1.4">HOW A MISCONDUCT COMPLAINT MOVES THROUGH POLICE DISCIPLINE</text>
+<text x="48" y="106" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="30" font-weight="700" fill="#27343a" text-anchor="start">The five stages</text>
+</g>
+<g id="Step 1 How a case begins">
+<rect x="48" y="150" width="190" height="167" rx="10" ry="10" fill="#eef0f1" stroke="#c5cbce" stroke-width="1"/>
+<rect x="131.0" y="168" width="24" height="18" rx="3" ry="3" fill="#f4c913"/>
+<text x="143.0" y="181" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#404f54" text-anchor="middle">1</text>
+<text x="143.0" y="215" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#27343a" text-anchor="middle">How a case begins</text>
+<text x="143.0" y="267" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">A complaint or report of</text>
+<text x="143.0" y="284" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">misconduct</text>
+</g>
+<g id="Connector 1">
+<path d="M250 233.5 L273.0 233.5" stroke="#a7aeb0" stroke-width="2" fill="none"/>
+<path d="M273.0 228.0 L273.0 239.0 L282 233.5 Z" fill="#a7aeb0"/>
+</g>
+<g id="Step 2 Investigation">
+<rect x="294" y="150" width="190" height="167" rx="10" ry="10" fill="#eef0f1" stroke="#c5cbce" stroke-width="1"/>
+<rect x="377.0" y="168" width="24" height="18" rx="3" ry="3" fill="#f4c913"/>
+<text x="389.0" y="181" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#404f54" text-anchor="middle">2</text>
+<text x="389.0" y="215" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#27343a" text-anchor="middle">Investigation</text>
+<text x="389.0" y="267" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">A supervisor, internal</text>
+<text x="389.0" y="284" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">affairs or a civilian</text>
+<text x="389.0" y="301" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">office</text>
+</g>
+<g id="Connector 2">
+<path d="M496 233.5 L519.0 233.5" stroke="#a7aeb0" stroke-width="2" fill="none"/>
+<path d="M519.0 228.0 L519.0 239.0 L528 233.5 Z" fill="#a7aeb0"/>
+</g>
+<g id="Step 3 Discipline hearing">
+<rect x="540" y="150" width="190" height="167" rx="10" ry="10" fill="#eef0f1" stroke="#c5cbce" stroke-width="1"/>
+<rect x="623.0" y="168" width="24" height="18" rx="3" ry="3" fill="#f4c913"/>
+<text x="635.0" y="181" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#404f54" text-anchor="middle">3</text>
+<text x="635.0" y="215" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#27343a" text-anchor="middle">Discipline hearing</text>
+<text x="635.0" y="267" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">Evidence weighed,</text>
+<text x="635.0" y="284" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">discipline recommended</text>
+</g>
+<g id="Connector 3">
+<path d="M742 233.5 L765.0 233.5" stroke="#a7aeb0" stroke-width="2" fill="none"/>
+<path d="M765.0 228.0 L765.0 239.0 L774 233.5 Z" fill="#a7aeb0"/>
+</g>
+<g id="Step 4 Decision">
+<rect x="786" y="150" width="190" height="167" rx="10" ry="10" fill="#eef0f1" stroke="#c5cbce" stroke-width="1"/>
+<rect x="869.0" y="168" width="24" height="18" rx="3" ry="3" fill="#f4c913"/>
+<text x="881.0" y="181" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#404f54" text-anchor="middle">4</text>
+<text x="881.0" y="215" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#27343a" text-anchor="middle">Decision</text>
+<text x="881.0" y="267" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">Corrective action, from</text>
+<text x="881.0" y="284" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">counseling to</text>
+<text x="881.0" y="301" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">termination</text>
+</g>
+<g id="Connector 4">
+<path d="M988 233.5 L1011.0 233.5" stroke="#a7aeb0" stroke-width="2" fill="none"/>
+<path d="M1011.0 228.0 L1011.0 239.0 L1020 233.5 Z" fill="#a7aeb0"/>
+</g>
+<g id="Step 5 Challenging discipline">
+<rect x="1032" y="150" width="190" height="167" rx="10" ry="10" fill="#eef0f1" stroke="#c5cbce" stroke-width="1"/>
+<rect x="1115.0" y="168" width="24" height="18" rx="3" ry="3" fill="#f4c913"/>
+<text x="1127.0" y="181" font-family="'Roboto Condensed', 'Arial Narrow', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#404f54" text-anchor="middle">5</text>
+<text x="1127.0" y="215" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#27343a" text-anchor="middle">Challenging</text>
+<text x="1127.0" y="235" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" font-weight="700" fill="#27343a" text-anchor="middle">discipline</text>
+<text x="1127.0" y="267" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">Grievance, arbitration</text>
+<text x="1127.0" y="284" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7479" text-anchor="middle">and civilian oversight</text>
+</g>
+</svg>

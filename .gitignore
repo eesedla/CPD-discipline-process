@@ -1,0 +1,6 @@
+# macOS / iCloud artefacts
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Icon?

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1133 3807.12">
+  <!-- Generator: Adobe Illustrator 30.3.0, SVG Export Plug-In . SVG Version: 2.1.3 Build 182)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #a9d2cf;
+        stroke: #8fc4ba;
+      }
+
+      .st0, .st1, .st2, .st3, .st4 {
+        stroke-width: 1.5px;
+      }
+
+      .st5 {
+        stroke-width: 2px;
+      }
+
+      .st5, .st1, .st2 {
+        stroke: #a7aeb0;
+      }
+
+      .st5, .st2, .st3 {
+        fill: none;
+      }
+
+      .st6 {
+        fill: #f4c913;
+      }
+
+      .st7 {
+        font-size: 15px;
+      }
+
+      .st7, .st8, .st9, .st10, .st11, .st12, .st13, .st14, .st15, .st16, .st17, .st18, .st19 {
+        isolation: isolate;
+      }
+
+      .st7, .st8, .st11, .st14, .st15, .st17, .st18, .st19 {
+        font-weight: 700;
+      }
+
+      .st7, .st11, .st13, .st15, .st17 {
+        fill: #27343a;
+      }
+
+      .st7, .st17 {
+        font-family: Inter18pt-Bold, 'Inter 18pt';
+      }
+
+      .st8 {
+        letter-spacing: .13em;
+      }
+
+      .st8, .st11, .st14, .st15, .st18, .st19 {
+        font-family: Roboto-Bold, Roboto;
+      }
+
+      .st8, .st12 {
+        font-size: 11.5px;
+      }
+
+      .st8, .st18 {
+        fill: #404f54;
+      }
+
+      .st1 {
+        fill: #e7e9ea;
+        stroke-dasharray: 5 4;
+      }
+
+      .st9 {
+        font-size: 13.5px;
+      }
+
+      .st9, .st10, .st12 {
+        fill: #6b7479;
+      }
+
+      .st9, .st10, .st12, .st16 {
+        font-family: Inter18pt-Regular, 'Inter 18pt';
+      }
+
+      .st10, .st16, .st18 {
+        font-size: 12px;
+      }
+
+      .st11 {
+        font-size: 30px;
+      }
+
+      .st20 {
+        fill: #eef0f1;
+        stroke: #c5cbce;
+      }
+
+      .st21 {
+        fill: #fff;
+      }
+
+      .st3 {
+        stroke: #23685b;
+        stroke-dasharray: 2 5;
+        stroke-linecap: round;
+      }
+
+      .st22, .st14, .st16 {
+        fill: #a7aeb0;
+      }
+
+      .st13 {
+        font-family: Inter18pt-Medium, 'Inter 18pt';
+        font-size: 12.5px;
+        font-weight: 500;
+      }
+
+      .st23, .st19 {
+        fill: #23685b;
+      }
+
+      .st14 {
+        font-size: 10px;
+        letter-spacing: .11em;
+      }
+
+      .st15 {
+        font-size: 21px;
+      }
+
+      .st17 {
+        font-size: 20px;
+      }
+
+      .st4 {
+        fill: #daeae5;
+        stroke: #a9d2cf;
+      }
+
+      .st24 {
+        display: none;
+      }
+
+      .st18 {
+        letter-spacing: .12em;
+      }
+
+      .st19 {
+        font-size: 10.5px;
+        letter-spacing: .1em;
+      }
+    </style>
+  </defs>
+  <g id="Background" class="st24">
+    <rect class="st21" x="0" width="1133" height="1893"/>
+  </g>
+  <g id="Title">
+    <rect class="st6" x="44" y="47" width="9" height="9"/>
+    <text class="st18" transform="translate(62 56)"><tspan x="0" y="0">CLEVELAND POLICE DISCIPLINE</tspan></text>
+    <text class="st11" transform="translate(44 102)"><tspan x="0" y="0">How a misconduct complaint moves through discipline</tspan></text>
+  </g>
+  <rect class="st6" x="516.6" y="147" width="9" height="9"/>
+  <text class="st8" transform="translate(531.04 156)"><tspan x="0" y="0">HOW A CASE BEGINS</tspan></text>
+  <text class="st15" transform="translate(384.5 200)"><tspan x="0" y="0">There’s a complaint or report of misconduct.</tspan></text>
+  <text class="st15" transform="translate(498.22 224)"><tspan x="0" y="0">This can start with…</tspan></text>
+  <rect class="st20" x="228.5" y="254" width="172" height="83" rx="10" ry="10"/>
+  <rect class="st20" x="414.5" y="254" width="172" height="83" rx="10" ry="10"/>
+  <g>
+    <text class="st13" transform="translate(263.95 281.38)"><tspan x="0" y="0">A complaint from</tspan></text>
+    <text class="st13" transform="translate(249.46 298.24)"><tspan x="0" y="0">another police officer</tspan></text>
+    <text class="st13" transform="translate(263.4 315.24)"><tspan x="0" y="0">or city employee</tspan></text>
+  </g>
+  <rect class="st20" x="600.5" y="254" width="172" height="83" rx="10" ry="10"/>
+  <g>
+    <text class="st13" transform="translate(434.07 281.31)"><tspan x="0" y="0">A supervisor who notes</tspan></text>
+    <text class="st13" transform="translate(452.33 298.31)"><tspan x="0" y="0">a potential rule or</tspan></text>
+    <text class="st13" transform="translate(459.5 315.31)"><tspan x="0" y="0">policy violation</tspan></text>
+  </g>
+  <rect class="st20" x="786.5" y="254" width="172" height="83" rx="10" ry="10"/>
+  <g>
+    <text class="st13" transform="translate(802.15 283.86)"><tspan x="0" y="0">A member of the public</tspan></text>
+    <text class="st13" transform="translate(818.27 300.86)"><tspan x="0" y="0">who files a citizen</tspan></text>
+    <text class="st13" transform="translate(841.85 317.86)"><tspan x="0" y="0">complaint</tspan></text>
+  </g>
+  <g>
+    <text class="st13" transform="translate(628.79 289.74)"><tspan x="0" y="0">An internal affairs or</tspan></text>
+    <text class="st13" transform="translate(625.96 306.74)"><tspan x="0" y="0">criminal investigation</tspan></text>
+  </g>
+  <path class="st2" d="M320,337v26h279"/>
+  <path class="st2" d="M506,337v26h93"/>
+  <path class="st2" d="M692,337v26h-93"/>
+  <g id="Connector_into_Investigation">
+    <path class="st5" d="M599,363v37"/>
+    <path class="st22" d="M593.5,400h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Kicker_Investigation_and_review">
+    <rect class="st6" x="503.6" y="413" width="9" height="9"/>
+    <text class="st8" transform="translate(519.02 422)"><tspan x="0" y="0">INVESTIGATION &amp; REVIEW</tspan></text>
+  </g>
+  <g id="Stage_2_Investigation">
+    <rect class="st0" x="429" y="439" width="340" height="138" rx="14" ry="14"/>
+    <text class="st17" transform="translate(495.35 485.49)"><tspan x="0" y="0">Internal investigation</tspan></text>
+    <text class="st9" transform="translate(484.34 505.56) scale(1.18 1)"><tspan x="0" y="0">Supervisors handle lower-level</tspan><tspan x="-8.77" y="16.2">violations; Internal Affairs handles</tspan><tspan x="9.9" y="32.4">possible crimes and serious</tspan><tspan x="62.69" y="48.6">misconduc</tspan></text>
+  </g>
+  <g id="Exit_Case_dropped">
+    <path class="st5" d="M779,508h43"/>
+    <path class="st22" d="M822,502.5v11l9-5.5-9-5.5Z"/>
+    <text class="st14" transform="translate(919.9 462.5)"><tspan x="0" y="0">OR, CASE EXITS</tspan></text>
+    <rect class="st1" x="839" y="472.5" width="250" height="71" rx="14" ry="14"/>
+    <text class="st7" transform="translate(913.39 502.5)"><tspan x="0" y="0">Case dropped</tspan></text>
+    <text class="st10" transform="translate(888.41 527.5)"><tspan x="0" y="0">Not supported by evidence</tspan></text>
+  </g>
+  <g id="Connector_into_Chief_of_Police_review">
+    <path class="st5" d="M599,577v37"/>
+    <path class="st22" d="M593.5,614h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Stage_3_Chief_of_Police_review">
+    <rect class="st0" x="429" y="623" width="340" height="138" rx="14" ry="14"/>
+    <text class="st17" transform="translate(494.5 666)"><tspan x="0" y="0">Chief of Police review</tspan></text>
+    <text class="st9" transform="translate(485.69 703)"><tspan x="0" y="0">The Chief decides whether the case</tspan></text>
+    <text class="st9" transform="translate(484.24 722)"><tspan x="0" y="0">proceeds. If it does, a charging letter</tspan></text>
+    <text class="st9" transform="translate(496.18 741)"><tspan x="0" y="0">sends it to a disciplinary hearing.</tspan></text>
+  </g>
+  <g id="Exit_Case_closed">
+    <path class="st5" d="M779,692h43"/>
+    <path class="st22" d="M822,686.5v11l9-5.5-9-5.5Z"/>
+    <text class="st14" transform="translate(919.9 646.5)"><tspan x="0" y="0">OR, CASE EXITS</tspan></text>
+    <rect class="st1" x="839" y="656.5" width="250" height="71" rx="14" ry="14"/>
+    <text class="st7" transform="translate(919.77 686.5)"><tspan x="0" y="0">Case closed</tspan></text>
+    <text class="st10" transform="translate(892.48 711.5)"><tspan x="0" y="0">Chief declines to proceed</tspan></text>
+  </g>
+  <g id="Connector_into_Disciplinary_hearing">
+    <path class="st5" d="M599,761v37"/>
+    <path class="st22" d="M593.5,798h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Kicker_Disciplinary_hearing">
+    <rect class="st6" x="511" y="811" width="9" height="9"/>
+    <text class="st8" transform="translate(526.09 820)"><tspan x="0" y="0">DISCIPLINARY HEARING</tspan></text>
+  </g>
+  <g id="Stage_4_Disciplinary_hearing">
+    <rect class="st0" x="429" y="837" width="340" height="157" rx="14" ry="14"/>
+    <text class="st17" transform="translate(502.44 880)"><tspan x="0" y="0">Disciplinary hearing</tspan></text>
+    <text class="st9" transform="translate(465.14 917)"><tspan x="0" y="0">A hearing officer reviews the evidence and</tspan></text>
+    <text class="st9" transform="translate(490.47 936)"><tspan x="0" y="0">recommends discipline. For citizen</tspan></text>
+    <text class="st9" transform="translate(464.76 955)"><tspan x="0" y="0">complaints, the independent Civilian Police</tspan></text>
+    <text class="st9" transform="translate(473.73 974)"><tspan x="0" y="0">Review Board takes on that role instead.</tspan></text>
+  </g>
+  <g id="Exit_Charges_dismissed">
+    <path class="st5" d="M779,915.5h43"/>
+    <path class="st22" d="M822,910v11l9-5.5-9-5.5Z"/>
+    <text class="st14" transform="translate(919.9 862)"><tspan x="0" y="0">OR, CASE EXITS</tspan></text>
+    <rect class="st1" x="839" y="872" width="250" height="87" rx="14" ry="14"/>
+    <text class="st7" transform="translate(894.81 902)"><tspan x="0" y="0">Charges dismissed</tspan></text>
+    <text class="st10" transform="translate(863.08 927)"><tspan x="0" y="0">Hearing officer concludes there was</tspan></text>
+    <text class="st10" transform="translate(922.84 943)"><tspan x="0" y="0">no misconduct</tspan></text>
+  </g>
+  <g id="Connector_into_Corrective_action">
+    <path class="st5" d="M599,994v37"/>
+    <path class="st22" d="M593.5,1031h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Kicker_Discipline_decision">
+    <rect class="st6" x="514.7" y="1044" width="9" height="9"/>
+    <text class="st8" transform="translate(533.47 1053)"><tspan x="0" y="0">DISCIPLINE DECISION</tspan></text>
+  </g>
+  <g id="Stage_5_Corrective_action">
+    <rect class="st0" x="429" y="1070" width="340" height="119" rx="14" ry="14"/>
+    <text class="st17" transform="translate(515.7 1113)"><tspan x="0" y="0">Corrective action</tspan></text>
+    <text class="st9" transform="translate(484.39 1150)"><tspan x="0" y="0">Reprimand, suspension, demotion or</tspan></text>
+    <text class="st9" transform="translate(561.88 1169)"><tspan x="0" y="0">termination.</tspan></text>
+  </g>
+  <g id="Exit_Non-disciplinary_action">
+    <path class="st5" d="M779,1129.5h43"/>
+    <path class="st22" d="M822,1124v11l9-5.5-9-5.5Z"/>
+    <text class="st14" transform="translate(919.9 1084)"><tspan x="0" y="0">OR, CASE EXITS</tspan></text>
+    <rect class="st1" x="839" y="1094" width="250" height="71" rx="14" ry="14"/>
+    <text class="st7" transform="translate(879.16 1124)"><tspan x="0" y="0">Non-disciplinary action</tspan></text>
+    <text class="st10" transform="translate(897.32 1149)"><tspan x="0" y="0">Counseling or retraining</tspan></text>
+  </g>
+  <g id="Connector_into_Grievance">
+    <path class="st5" d="M599,1189v37"/>
+    <path class="st22" d="M593.5,1226h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Kicker_Challenging_discipline">
+    <rect class="st6" x="503.6" y="1239" width="9" height="9"/>
+    <text class="st8" transform="translate(518.05 1248)"><tspan x="0" y="0">CHALLENGING DISCIPLINE</tspan></text>
+  </g>
+  <g id="Stage_6_Grievance">
+    <rect class="st4" x="429" y="1265" width="340" height="138" rx="14" ry="14"/>
+    <text class="st17" transform="translate(549.78 1308)"><tspan x="0" y="0">Grievance</tspan></text>
+    <text class="st9" transform="translate(476.17 1345)"><tspan x="0" y="0">The officer’s union can file a grievance,</tspan></text>
+    <text class="st9" transform="translate(468.68 1364)"><tspan x="0" y="0">reviewed at several levels. Requires union</tspan></text>
+    <text class="st9" transform="translate(551.76 1383)"><tspan x="0" y="0">representation.</tspan></text>
+  </g>
+  <g id="Exit_Grievance_resolved">
+    <path class="st5" d="M779,1334h43"/>
+    <path class="st22" d="M822,1328.5v11l9-5.5-9-5.5Z"/>
+    <text class="st14" transform="translate(919.9 1288.5)"><tspan x="0" y="0">OR, CASE EXITS</tspan></text>
+    <rect class="st1" x="839" y="1298.5" width="250" height="71" rx="14" ry="14"/>
+    <text class="st7" transform="translate(893.97 1328.5)"><tspan x="0" y="0">Grievance resolved</tspan></text>
+    <text class="st10" transform="translate(906.87 1353.5)"><tspan x="0" y="0">City and union settle</tspan></text>
+  </g>
+  <g id="Connector_into_Arbitration">
+    <path class="st5" d="M599,1403v37"/>
+    <path class="st22" d="M593.5,1440h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Stage_7_Arbitration">
+    <rect class="st4" x="429" y="1449" width="340" height="119" rx="14" ry="14"/>
+    <text class="st17" transform="translate(546.77 1492)"><tspan x="0" y="0">Arbitration</tspan></text>
+    <text class="st9" transform="translate(484.32 1529)"><tspan x="0" y="0">A neutral third party issues a binding</tspan></text>
+    <text class="st9" transform="translate(570.9 1548)"><tspan x="0" y="0">decision.</tspan></text>
+  </g>
+  <g id="Connector_into_Community_Police_Commission_review">
+    <path class="st5" d="M599,1568v37"/>
+    <path class="st22" d="M593.5,1605h11l-5.5,9-5.5-9Z"/>
+  </g>
+  <g id="Kicker_Oversight_and_final_review">
+    <rect class="st6" x="496.2" y="1618" width="9" height="9"/>
+    <text class="st8" transform="translate(511.28 1627)"><tspan x="0" y="0">OVERSIGHT &amp; FINAL REVIEW</tspan></text>
+  </g>
+  <g id="Stage_8_Community_Police_Commission_review">
+    <rect class="st4" x="429" y="1644" width="340" height="163" rx="14" ry="14"/>
+    <text class="st17" transform="translate(448.59 1687)"><tspan x="0" y="0">Community Police Commission</tspan></text>
+    <text class="st17" transform="translate(566.78 1712)"><tspan x="0" y="0">review</tspan></text>
+    <text class="st9" transform="translate(474.12 1749)"><tspan x="0" y="0">Final authority over discipline decisions.</tspan></text>
+    <text class="st9" transform="translate(467.88 1768)"><tspan x="0" y="0">Citizens may also petition the commission</tspan></text>
+    <text class="st9" transform="translate(541.56 1787)"><tspan x="0" y="0">directly for review.</tspan></text>
+  </g>
+  <g id="Direct_appeal_bypass">
+    <path class="st3" d="M429,1334H100v391.5h315"/>
+    <path class="st23" d="M415,1720v11l11-5.5-11-5.5Z"/>
+    <g id="Direct_appeal_label">
+      <text class="st19" transform="translate(114 1523.75)"><tspan x="0" y="0">DIRECT APPEAL</tspan></text>
+      <text class="st12" transform="translate(114 1539.75)"><tspan x="0" y="0">The officer can appeal straight to the commission,</tspan></text>
+      <text class="st12" transform="translate(114 1554.75)"><tspan x="0" y="0">bypassing grievance and arbitration.</tspan></text>
+    </g>
+  </g>
+  <g id="Footnote">
+    <text class="st16" transform="translate(44 1861)"><tspan x="0" y="0">Not every complaint ends in discipline. The dashed boxes mark the points where a case can end early.</tspan></text>
+  </g>
+</svg>

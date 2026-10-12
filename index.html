@@ -90,10 +90,18 @@
     letter-spacing: -0.01em;
     color: var(--ink);
   }
+  /* Standfirst under the headline, then the short instruction line. */
+  .toc-standfirst {
+    max-width: 620px;
+    margin: 18px auto 0;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
   .toc-dek {
     max-width: 560px;
-    margin: 16px auto 0;
-    font-size: 16px;
+    margin: 14px auto 0;
+    font-size: 15px;
     line-height: 1.6;
     color: var(--gray-text);
   }
@@ -194,6 +202,7 @@
   }
 
   @media (max-width: 960px) {
+    .toc-standfirst { font-size: 17px; }
     .toc-steps { flex-direction: column; align-items: center; }
     .toc-step { flex-direction: column; width: 100%; max-width: 340px; }
     .toc-card { width: 100%; }
@@ -1242,6 +1251,7 @@
   <header class="toc">
     <p class="toc-kicker">Cleveland police discipline</p>
     <h1 class="toc-title">How Cleveland police discipline works</h1>
+    <p class="toc-standfirst">The Cleveland police discipline process is complicated and involves quite a few steps. Here&rsquo;s a general overview of how it works.</p>
     <p class="toc-dek">Scroll to follow the whole path, or jump to a stage.</p>
 
     <nav aria-labelledby="toc-contents-label">

@@ -796,7 +796,7 @@
     flex: 1 1 auto;
     width: 0;
     border-left: 2px solid var(--gray-faint);
-    transform: scaleY(0);
+    transform: scaleY(1);
     transform-origin: top center;
     transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
   }
@@ -805,14 +805,22 @@
     width: 16px;
     height: 8px;
     color: var(--gray-faint);
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.25s ease;
   }
   .drop-chevron svg { display: block; width: 100%; height: 100%; }
+  /* Drawn by default. They are collapsed only while the beat that owns
+     them is genuinely still waiting its turn — if that element never
+     becomes a beat, the box shows and the line has to show with it,
+     otherwise the connection reads as an unexplained gap. */
+  .public-again.fade:not(.is-visible) .drop-line,
+  .chief-drop.fade:not(.is-visible) .drop-line { transform: scaleY(0); }
+  .public-again.fade:not(.is-visible) .drop-chevron,
+  .chief-drop.fade:not(.is-visible) .drop-chevron { opacity: 0; }
   .public-again.is-visible .drop-line,
-  .chief-drop.is-visible .drop-line { transform: scaleY(1); transition-delay: 0.25s; }
+  .chief-drop.is-visible .drop-line { transition-delay: 0.25s; }
   .public-again.is-visible .drop-chevron,
-  .chief-drop.is-visible .drop-chevron { opacity: 1; transition-delay: 0.7s; }
+  .chief-drop.is-visible .drop-chevron { transition-delay: 0.7s; }
   @media (prefers-reduced-motion: reduce) {
     .drop-line, .drop-chevron { transition: none; }
   }
@@ -1461,7 +1469,6 @@
       display: flex;
       flex-direction: column;
       row-gap: 14px;
-      max-width: 340px;
     }
     .investigation-grid > * { grid-column: auto; grid-row: auto; }
     .chief-box { margin-top: 0; }
@@ -1491,15 +1498,21 @@
     .criminal-anchor { height: auto; order: 0; }
     .criminal-note { position: static; }
     .public-again .entry-box { width: 100%; max-width: 340px; }
+    /* The grids no longer cap themselves, so the boxes inside them keep
+       their own cap and stay centred rather than stretching with the copy. */
+    .investigation-grid .main-box { max-width: 340px; margin-left: auto; margin-right: auto; }
     /* One centred trunk on a phone, so the second would only double the
        first exactly. */
     .trunk--external { display: none; }
     .challenge-grid {
       grid-template-columns: 1fr;
       row-gap: 20px;
-      max-width: 340px;
     }
     .challenge-copy, .challenge-diagram { grid-column: 1; grid-row: auto; }
+    /* The grid no longer caps itself, so the diagram keeps its own width
+       and centres: letting it stretch would only pull the settlement spur
+       away from the grievance box it comes out of. */
+    .challenge-diagram { max-width: 340px; margin-left: auto; margin-right: auto; }
     /* The spur still comes out of the side of the grievance box, as on
        desktop — just narrower. Stacking it would park the settlement under
        arbitration, which reads as a step rather than an alternative. */

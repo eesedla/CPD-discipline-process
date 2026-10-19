@@ -26,12 +26,8 @@
      These are declared on the wrapper rather than on :root so that
      names as ordinary as --ink or --radius cannot collide with the
      theme's own custom properties when this is inlined in a post.
-     The restyled .entry-header sits outside .viz-container, so it is
-     named here too; custom properties inherit to the descendants.
      ============================================================ */
-  .viz-container,
-  .site-main > .entry-header,
-  .site-main > .post-thumbnail {
+  .viz-container {
     /* Signal palette */
     --signal-yellow: #f4c913;
     --teal:          #23685b;
@@ -63,221 +59,10 @@
   }
 
 
-  /* ---------- The WordPress post header, restyled ----------
-     Inside the Signal (Newspack) post this embed does NOT carry its own
-     headline. The theme's own markup stays exactly as WordPress prints it:
-
-       main#main.site-main
-         > header.entry-header   .cat-links / h1.entry-title /
-                                 .newspack-post-subtitle / .entry-subhead
-         > figure.post-thumbnail the featured image + credit
-         > .main-content         the post body, where this embed lives
-
-     so the <h1> and the byline are still the real, crawlable ones. All
-     that changes here is how they look: the header and the featured
-     image are dropped into the same grid cell on .site-main, so the
-     headline sits over the image, and the type is set in the scrolly's
-     faces. Nothing below depends on JavaScript.
-
-     If the theme's markup ever changes, this is the block to revisit. */
-  .site-main {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .site-main > .entry-header,
-  .site-main > .post-thumbnail { grid-row: 1; grid-column: 1; }
-  .site-main > .main-content    { grid-row: 2; grid-column: 1; }
-
-  /* Full-bleed out of whatever width the theme gives #main. */
-  .site-main > .entry-header,
-  .site-main > .post-thumbnail {
-    /* The theme may not set a global border-box reset; the padding below
-       must stay inside the 100vw, not add to it. */
-    box-sizing: border-box;
-    width: 100vw;
-    max-width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-  }
-  .site-main > .entry-header *,
-  .site-main > .post-thumbnail * { box-sizing: border-box; }
-
-  /* 100vw counts the scrollbar's width but the content area does not, so
-     on platforms with classic scrollbars the bleed would overhang by a
-     few pixels and give the post a sideways scroll. Clip it. This is
-     overflow-x: CLIP, not hidden: clip makes no scroll container, so the
-     sticky .beat-stack panels below go on pinning to the viewport.
-     It has to sit on the body element rather than on .site-main: the
-     theme gives .site-main a content width, so clipping there would crop
-     the full-bleed hero back to that width. */
+  /* The embed itself never bleeds past the viewport, but this stays as a
+     guard: it is overflow-x CLIP, not hidden, so it creates no scroll
+     container and the sticky .beat-stack panels go on pinning normally. */
   body { overflow-x: clip; }
-
-  .site-main > .post-thumbnail {
-    margin-top: 0;
-    margin-bottom: 0;
-    position: relative;
-    background: var(--ink);
-    overflow: hidden;
-  }
-  .site-main > .post-thumbnail img {
-    display: block;
-    width: 100%;
-    height: clamp(340px, 62vh, 620px);
-    object-fit: cover;
-    object-position: center 35%;
-  }
-  /* Scrim: keeps the headline legible without hiding the image. */
-  .site-main > .post-thumbnail::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom,
-      rgba(39, 52, 58, 0.15) 0%,
-      rgba(39, 52, 58, 0.45) 45%,
-      rgba(39, 52, 58, 0.88) 100%);
-  }
-  .site-main > .post-thumbnail figcaption {
-    position: absolute;
-    z-index: 2;
-    right: 18px;
-    bottom: 8px;
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 11px;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.62);
-    text-align: right;
-  }
-  .site-main > .post-thumbnail figcaption a { color: inherit; text-decoration: underline; }
-
-  /* ---- The header itself ---- */
-  .site-main > .entry-header {
-    position: relative;
-    z-index: 2;
-    align-self: end;
-    /* The header is outside .viz-container, so it cannot inherit the
-       wrapper's face or its smoothing; name both here rather than
-       leaning on the theme's. */
-    font-family: var(--font-display);
-    -webkit-font-smoothing: antialiased;
-    padding: 0 20px 40px;
-    color: #fff;
-    text-align: center;
-    pointer-events: none;   /* let clicks through the empty gutters */
-  }
-  .site-main > .entry-header > * { pointer-events: auto; }
-
-  /* Category line, set like the scrolly's kicker. */
-  .entry-header .cat-links {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-label);
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.85);
-  }
-  .entry-header .cat-links::before {
-    content: '';
-    width: 9px;
-    height: 9px;
-    flex: none;
-    background: var(--signal-yellow);
-  }
-  .entry-header .cat-links a {
-    color: inherit;
-    text-decoration: none;
-  }
-  .entry-header .cat-links a:hover { text-decoration: underline; }
-
-  .entry-header .entry-title {
-    max-width: 19em;
-    margin: 16px auto 0;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: clamp(2rem, 5.4vw, 3.4rem);
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    color: #fff;
-    text-wrap: balance;
-    text-shadow: 0 1px 24px rgba(16, 24, 28, 0.45);
-  }
-
-  /* Subtitle = the standfirst. */
-  .entry-header .newspack-post-subtitle {
-    max-width: 620px;
-    margin: 16px auto 0;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(16px, 1.3vw, 19px);
-    font-style: normal;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.92);
-  }
-
-  /* Byline + date, on one centred line with the avatars. */
-  .entry-header .entry-subhead { margin-top: 22px; }
-  .entry-header .entry-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 6px 10px;
-    font-family: var(--font-display);
-    font-size: 14px;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.86);
-  }
-  .entry-header .author-avatar { display: flex; }
-  .entry-header .author-avatar + .author-avatar { margin-left: -14px; }
-  .entry-header .author-avatar img {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.85);
-  }
-  .entry-header .byline { font-weight: 500; }
-  .entry-header .byline a,
-  .entry-header .author a {
-    color: #fff;
-    font-weight: 600;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(244, 201, 19, 0.9);
-  }
-  .entry-header .byline a:hover,
-  .entry-header .author a:hover { border-bottom-color: #fff; }
-  .entry-header .posted-on {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 13px;
-  }
-  .entry-header .posted-on::before {
-    content: '·';
-    margin-right: 8px;
-    color: rgba(255, 255, 255, 0.45);
-  }
-  .entry-header .posted-on a { color: inherit; text-decoration: none; }
-
-  /* Narrow screens: shorter hero, tighter type, no hanging date rule. */
-  @media (max-width: 640px) {
-    .site-main > .post-thumbnail img { height: clamp(300px, 72vh, 520px); }
-    .site-main > .entry-header { padding: 0 18px 30px; }
-    .entry-header .entry-title { font-size: clamp(1.7rem, 8vw, 2.3rem); }
-    .entry-header .newspack-post-subtitle { font-size: 16px; }
-    .entry-header .entry-meta { font-size: 13px; gap: 4px 8px; }
-    .entry-header .author-avatar img { width: 30px; height: 30px; }
-    .entry-header .posted-on { flex-basis: 100%; }
-    .entry-header .posted-on::before { content: none; margin: 0; }
-  }
-
-  /* The hero would otherwise end hard against the body copy. The .toc
-     that opens this embed brings its own generous top padding, so this
-     only has to cover the case where something else leads. */
-  .site-main > .main-content > * > .entry-content > :first-child:not(.toc) {
-    padding-top: clamp(28px, 5vh, 56px);
-  }
 
   /* ---------- Table of contents: the whole flow at a glance ----------
      Five cards, one per stage, linked by the same connector + chevron
@@ -506,6 +291,16 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    /* A trunk runs down past this label on its way into the stage, and
+       lands on the text itself once the layout narrows. Only as wide as
+       its content, on an opaque ground, so the line passes behind it. */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px 12px;
+    background: #ffffff;
+    position: relative;
+    z-index: 2;
   }
   .phase-label::before {
     content: '';
@@ -841,6 +636,21 @@
     width: 100%;
     max-width: 920px;
   }
+  /* Below about 940px the four boxes wrap. The row that wraps needs room
+     above it for the merge bar belonging to the row before, which would
+     otherwise land on top of it. A phone stacks them instead, and sets its
+     own spacing further down. */
+  @media (min-width: 641px) {
+    .entry-grid { row-gap: 44px; }
+    /* Never fewer than three to a row. Left to wrap freely the four boxes
+       go 2 + 2 between about 641 and 714px, which puts an entry box
+       directly in the path of the trunk running down to the department
+       investigation. Narrowing them keeps the wrap at 3 + 1, which the
+       merge is drawn for. */
+    /* Two classes deep so this still wins over the .entry-box width set
+       further down the stylesheet. */
+    .entry-grid .entry-box { width: min(210px, calc((100% - 34px) / 3)); }
+  }
   .entry-box {
     background: var(--entry-fill);
     border: 1px solid var(--box-line);
@@ -918,7 +728,7 @@
 
   /* ---------- Merge convergence: the short elbows where the entry
      phase's boxes gather into the two investigation tracks. ---------- */
-  .merge-svg-wrap { width: 100%; max-width: 920px; position: relative; }
+  .merge-svg-wrap { width: 100%; max-width: 920px; position: relative; min-height: 26px; }
 
   /* The caption that shows between the entry boxes and the merge. It is
      absolutely positioned so it takes no layout space — the stack does
@@ -1086,7 +896,11 @@
   .cprb-note li b { color: var(--ink); }
   .inv-note strong,
   .phase-note strong { color: var(--ink); }
-  .merge-svg { display: block; width: 100%; overflow: visible; }
+  /* Out of the flow: the svg reaches up over the entry grid so a box
+     that has wrapped to a second row still gets its own riser, while the
+     wrap keeps the 26px of layout height the merge alone used to take. */
+  .merge-svg { display: block; width: 100%; overflow: visible;
+               position: absolute; pointer-events: none; }
   .merge-path {
     fill: none;
     stroke: var(--gray-faint);
@@ -2033,16 +1847,35 @@ try {
     document.querySelectorAll('.entry-grid .entry-box[data-route]').forEach((el) => {
       (sources[el.dataset.route] = sources[el.dataset.route] || []).push(el);
     });
+    const label = stack.querySelector(':scope > .phase-label');
+    const labelRect = label && label.getBoundingClientRect();
     Object.keys(sources).forEach((route) => {
       const box = grid.querySelector('.main-box[data-route="' + route + '"]');
       if (sources[route].length !== 1 || !box) return;
       const r = box.getBoundingClientRect();
       const src = sources[route][0].getBoundingClientRect();
       const inset = 20;
-      targets[route] = Math.max(
-        r.left + inset - centerX,
-        Math.min(r.right - inset - centerX, src.left + src.width / 2 - centerX)
+      let x = Math.max(
+        r.left + inset,
+        Math.min(r.right - inset, src.left + src.width / 2)
       );
+
+      // Once the entry boxes wrap, this source sits near the middle of the
+      // page and its line comes down on top of the next stage's label. Slide
+      // it along the box, away from the centre, until it is clear — staying
+      // inside the box, which is why it lands off centre rather than in the
+      // middle of it.
+      // Not on a phone: there the tracks collapse onto the one centre line
+      // and the second trunk is hidden, so nudging this one aside would
+      // only leave a stub pointing at nothing.
+      if (!isNarrow() && labelRect
+          && x > labelRect.left - 14 && x < labelRect.right + 14) {
+        const right = labelRect.right + 14;
+        const left = labelRect.left - 14;
+        if (right <= r.right - inset) x = right;
+        else if (left >= r.left + inset) x = left;
+      }
+      targets[route] = x - centerX;
     });
     return targets;
   }
@@ -2058,10 +1891,67 @@ try {
       paths = [];
       const boxes = Array.from(boxContainer.children);
       const gridRect = boxContainer.getBoundingClientRect();
+      const wrapRect = wrap.getBoundingClientRect();
       const width = gridRect.width || 1;
       const mergeHeight = 26;
-      svg.setAttribute('viewBox', `0 0 ${width} ${mergeHeight}`);
-      svg.style.height = mergeHeight + 'px';
+
+      // The entry boxes sit on one row on a wide screen but wrap below
+      // about 940px, and a wrapped box lands directly under one that did
+      // not wrap. So each box's line has to start at its own bottom edge
+      // and turn at a bar belonging to its own row — drawing every line
+      // from a single y below the whole grid leaves the upper row's boxes
+      // with no visible riser and makes the wrapped box look as though it
+      // feeds the merge the others share.
+      // Group the boxes into rows. The grid centres each row, so boxes
+      // sharing a row have different tops and bottoms when their text runs
+      // to a different number of lines — their centres are what match.
+      const rows = [];
+      boxes.forEach((box) => {
+        const r = box.getBoundingClientRect();
+        const mid = r.top + r.height / 2;
+        let row = rows.find((v) => Math.abs(v.mid - mid) < 4);
+        if (!row) rows.push((row = { mid, top: r.top, bottom: r.bottom }));
+        row.top = Math.min(row.top, r.top);
+        row.bottom = Math.max(row.bottom, r.bottom);
+      });
+      rows.sort((a, b) => a.mid - b.mid);
+
+      // A phone stacks the boxes one per row. There each line would run
+      // from its own bottom edge straight down through every box below it,
+      // so they all start together under the last one instead.
+      const stacked = boxes.length > 1 && rows.length === boxes.length;
+
+      function rowFor(boxRect) {
+        if (stacked) return rows[rows.length - 1];
+        const mid = boxRect.top + boxRect.height / 2;
+        return rows.find((v) => Math.abs(v.mid - mid) < 4) || rows[rows.length - 1];
+      }
+
+      // How far below a row its bar sits: the full merge height for the
+      // last row, otherwise half way into the gap before the next row, so
+      // the bar never lands on the boxes that wrapped underneath it.
+      function dropFor(row) {
+        const next = rows[rows.indexOf(row) + 1];
+        if (!next) return mergeHeight;
+        return Math.max(8, Math.min(mergeHeight, (next.top - row.bottom) / 2));
+      }
+
+      // The svg spans the grid as well as the merge below it, and is taken
+      // out of the flow so that extra height changes nothing: the wrap
+      // keeps the 26px the merge alone used to occupy.
+      //
+      // It has to reach the WRAP's bottom, not just the merge height: the
+      // trunk that carries on downward is positioned from the wrap, and the
+      // stack's own gap sits between the two. Stopping short of it leaves
+      // that gap as a visible break in the middle of the line.
+      const top = gridRect.top;
+      const height = Math.max(gridRect.height + mergeHeight,
+                              wrapRect.bottom - gridRect.top);
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.style.height = height + 'px';
+      svg.style.width = width + 'px';
+      svg.style.left = (gridRect.left - wrapRect.left) + 'px';
+      svg.style.top = (top - wrapRect.top) + 'px';
 
       const centerX = width / 2;
       const targets = splitTargets();
@@ -2069,10 +1959,17 @@ try {
       boxes.forEach((box) => {
         const boxRect = box.getBoundingClientRect();
         const boxCenterX = boxRect.left + boxRect.width / 2 - gridRect.left;
+        const row = rowFor(boxRect);
+        const startY = (stacked ? gridRect.bottom : boxRect.bottom) - top;
+        const barY = row.bottom - top + dropFor(row);
         const route = box.dataset.route;
         const endX = centerX + ((targets && route && targets[route]) || 0);
         const p = document.createElementNS(ns, 'path');
-        p.setAttribute('d', `M ${boxCenterX} 0 L ${boxCenterX} ${mergeHeight} L ${endX} ${mergeHeight}`);
+        // Down from the box, across on its row's bar, then down to the
+        // trunk. On a single row the last leg has no length, so this draws
+        // exactly what it always did.
+        p.setAttribute('d', `M ${boxCenterX} ${startY} L ${boxCenterX} ${barY}`
+          + ` L ${endX} ${barY} L ${endX} ${height}`);
         p.setAttribute('class', 'merge-path');
         svg.appendChild(p);
         paths.push(p);
@@ -2086,15 +1983,16 @@ try {
     }
 
     layout();
-    window.addEventListener('resize', layout);
 
-    return (on) => {
+    const reveal = (on) => {
       if (on === revealed) return;
       revealed = on;
       paths.forEach((p) => {
         p.style.strokeDashoffset = on ? 0 : p.getTotalLength();
       });
     };
+    reveal.layout = layout;
+    return reveal;
   }
 
   // Each .phase is much taller than the viewport. Its .beat-stack sticks
@@ -2126,6 +2024,11 @@ try {
     const tail = narrow ? 45 : 60;
     return (count * perBeat + tail) + 'vh';
   }
+
+  // Collected so layoutAll can re-measure them with the .fade transforms
+  // neutralised — these read each box's own bottom edge, which a part-played
+  // reveal would otherwise shift.
+  const convergences = [];
 
   const phases = Array.from(document.querySelectorAll('.phase')).map((phase) => {
     const label = phase.querySelector(':scope > .beat-stack > .phase-label');
@@ -2166,6 +2069,7 @@ try {
     const mergeSvgWrap = phase.querySelector(':scope > .beat-stack > .merge-svg-wrap');
     if (mergeSvgWrap && boxContainer) {
       const revealConvergence = buildConvergence(mergeSvgWrap, boxContainer);
+      convergences.push(revealConvergence);
       trunkState.start = mergeSvgWrap;
       beats.push([(on) => {
         revealConvergence(on);
@@ -2558,6 +2462,7 @@ try {
       layoutAside();
       if (chiefLinks) chiefLinks.layout();
       elbows.forEach((e) => e.layout());
+      convergences.forEach((c) => c.layout());
     } finally {
       root.classList.remove('viz-measuring');
     }

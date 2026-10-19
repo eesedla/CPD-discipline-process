@@ -949,6 +949,91 @@ try {
     });
   });
 
+  // Back to top. The masthead scrolls away on this piece and the read is
+  // long, so there is nothing to get home by otherwise.
+  //
+  // Built here rather than in the markup so that the whole thing -- button,
+  // styling, behaviour -- travels in this one file. Its colours are written
+  // out literally: the palette is declared on .viz-container and this sits
+  // on the body, outside it, where those custom properties do not reach.
+  (function backToTop() {
+    if (!document.querySelector('.viz-container')) { return; }
+
+    var style = document.createElement('style');
+    style.textContent = [
+      '.viz-top {',
+      '  position: fixed;',
+      '  right: 18px;',
+      '  bottom: 18px;',
+      '  z-index: 9999;',
+      '  width: 46px;',
+      '  height: 46px;',
+      '  display: flex;',
+      '  align-items: center;',
+      '  justify-content: center;',
+      '  padding: 0;',
+      '  border: 0;',
+      '  border-radius: 50%;',
+      '  background: #27343a;',
+      '  color: #ffffff;',
+      '  cursor: pointer;',
+      '  opacity: 0;',
+      '  visibility: hidden;',
+      '  pointer-events: none;',
+      '  transform: translateY(8px);',
+      '  transition: opacity 0.25s ease, transform 0.25s ease,',
+      '              visibility 0.25s, background 0.15s ease;',
+      '  box-shadow: 0 4px 16px rgba(16, 24, 28, 0.28);',
+      '}',
+      /* Clear of a phone's home indicator and any rounded corner. */
+      '@supports (bottom: env(safe-area-inset-bottom)) {',
+      '  .viz-top {',
+      '    right: calc(18px + env(safe-area-inset-right));',
+      '    bottom: calc(18px + env(safe-area-inset-bottom));',
+      '  }',
+      '}',
+      /* Hidden rather than merely transparent, so it is not a tab stop
+         while it is off. */
+      '.viz-top.is-on {',
+      '  opacity: 1;',
+      '  visibility: visible;',
+      '  pointer-events: auto;',
+      '  transform: none;',
+      '}',
+      '.viz-top:hover { background: #23685b; }',
+      '.viz-top:focus-visible { outline: 3px solid #f4c913; outline-offset: 3px; }',
+      '.viz-top svg { display: block; width: 16px; height: 10px; }',
+      '@media (prefers-reduced-motion: reduce) {',
+      '  .viz-top { transition: none; }',
+      '}'
+    ].join('\n');
+    document.head.appendChild(style);
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'viz-top';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = '<svg viewBox="0 0 16 10" fill="none" aria-hidden="true" '
+      + 'focusable="false"><path d="M2 8L8 2L14 8" stroke="currentColor" '
+      + 'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    // On the body, so no ancestor's overflow or transform can trap it.
+    document.body.appendChild(btn);
+
+    btn.addEventListener('click', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+
+    // Shows once the reader is past the opening screen, which keeps it out
+    // of the way of the contents at the top.
+    function sync() {
+      btn.classList.toggle('is-on', window.scrollY > window.innerHeight * 1.2);
+    }
+    window.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  })();
+
   // Example walkthrough: one step at a time, with prev/next buttons.
   (function () {
     const root = document.getElementById('ex-card');

@@ -1,0 +1,1851 @@
+<!-- ============================================================
+     Cleveland police discipline explainer - WordPress embed
+     Paste EVERYTHING below into a single Custom HTML block.
+
+     The markup and the stylesheet are inline, so every word of the
+     explainer is real text in the post and search engines and Google
+     Discover index it as part of the article. Only the animation engine
+     is loaded from a file.
+
+     That split is deliberate. Pasted inline, the engine kept arriving
+     corrupted -- "Uncaught SyntaxError: Invalid or unexpected token" --
+     because WordPress filters and re-encodes post content, and one bad
+     character anywhere in a script kills all of it. A src attribute is
+     not content, so nothing rewrites it.
+
+     If the engine ever fails to load, the page falls back on its own to
+     the plain, fully readable document. It never goes blank.
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     EDIT HERE FIRST — all the brand knobs live here.
+     These 
+     are declared on the wrapper rather than on :root so that
+     names as ordinary as --ink or --radius cannot collide with the
+     theme's own custom properties when this is inlined in a post.
+     ============================================================ */
+  .viz-container {
+    /* Signal palette */
+    --signal-yellow: #f4c913;
+    --teal:          #23685b;
+    --teal-fill:      #a9d2cf;
+    --teal-fill-pale: #daeae5;
+    --teal-line:     #8fc4ba;
+    --slate:         #404f54;
+    --ink:           #27343a;
+    --gray:          #404F54;
+    --gray-text:     #6b7479;
+    --gray-faint:    #a7aeb0;
+    --entry-fill:    #eef0f1;
+    --exit-fill:     #e7e9ea;
+    --box-line:      #c5cbce;
+
+    --font-display: 'Inter', system-ui, sans-serif;
+    --font-label:   'Roboto Condensed', system-ui, sans-serif;
+    --font-heading: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+    --radius:       14px;
+  }
+
+  .viz-container,
+  .viz-container * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .viz-container {
+    background: #ffffff;
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+  }
+
+
+  /* The embed itself never bleeds past the viewport, but this stays as a
+     guard: it is overflow-x CLIP, not hidden, so it creates no scroll
+     container and the sticky .beat-stack panels go on pinning normally. */
+  body { overflow-x: clip; }
+
+  /* ---------- Table of contents: the whole flow at a glance ----------
+     Five cards, one per stage, linked by the same connector + chevron
+     language the scrolling chart uses further down. Clicking a card
+     jumps to that stage (see the contents handler in the script).
+     Below 960px the row restacks into a column and the chevrons turn
+     to point down. ---------- */
+  .toc {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 11vh 20px 9vh;
+    text-align: center;
+  }
+
+  .toc-kicker {
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .toc-kicker::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    background: var(--signal-yellow);
+    flex: none;
+  }
+
+  .toc-title {
+    max-width: 17em;
+    margin: 18px auto 0;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  /* Standfirst under the headline, then the short instruction line. */
+  .toc-standfirst {
+    max-width: 620px;
+    margin: 18px auto 0;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .toc-dek {
+    max-width: 560px;
+    margin: 14px auto 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--gray-text);
+  }
+
+  .toc-contents-label {
+    margin-top: 46px;
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-faint);
+  }
+
+  .toc-steps {
+    list-style: none;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    margin: 16px 0 0;
+  }
+  .toc-step { display: flex; align-items: stretch; }
+
+  .toc-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    width: 156px;
+    padding: 16px 14px 18px;
+    background: var(--entry-fill);
+    border: 1px solid var(--box-line);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.18s ease, border-color 0.18s ease,
+                transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .toc-card:hover, .toc-card:focus-visible {
+    background: var(--teal-fill-pale);
+    border-color: var(--teal-line);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(35, 104, 91, 0.12);
+  }
+  .toc-card:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+
+  .toc-num {
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--slate);
+    background: var(--signal-yellow);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .toc-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .toc-note {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--gray-text);
+  }
+
+  /* The connector between two cards: same line + chevron as .branch. */
+  .toc-join {
+    flex: none;
+    align-self: center;
+    width: 34px;
+    height: 12px;
+    color: var(--gray-faint);
+  }
+  .toc-join svg { display: block; width: 100%; height: 100%; }
+
+  .toc-download {
+    margin: 22px auto 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .toc-download a {
+    color: var(--teal);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .toc-download a:hover { color: var(--ink); }
+
+  .toc-exit {
+    max-width: 560px;
+    margin: 24px auto 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--gray-faint);
+  }
+
+  @media (max-width: 960px) {
+    .toc-standfirst { font-size: 17px; }
+    .toc-steps { flex-direction: column; align-items: center; }
+    .toc-step { flex-direction: column; width: 100%; max-width: 340px; }
+    .toc-card { width: 100%; }
+    /* Square box + rotated chevron keeps the viewBox undistorted. */
+    .toc-join { width: 34px; height: 34px; margin: 2px 0; }
+    .toc-join svg { transform: rotate(90deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-card { transition: none; }
+    .toc-card:hover, .toc-card:focus-visible { transform: none; }
+  }
+
+
+  /* ---------- Phase sections: the whole screen IS the chart ----------
+     Each phase is tall (well over 100vh) to give real scroll distance.
+     The .beat-stack inside it sticks to the vertical center once
+     reached, and its beats (label / lead / box-group) reveal one at a
+     time — driven by scroll progress through the phase — so once
+     revealed they stay stuck together in the center until the phase
+     ends and the whole stack releases and scrolls away. ---------- */
+  .phase {
+    width: 100%;
+    min-height: 160vh;
+    position: relative;
+  }
+  .phase.phase--tall { min-height: 230vh; }
+
+  .beat-stack {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 6vh 20px;
+  }
+
+  /* ---------- The entry -> investigation junction ----------
+     Both stacks are normally a full screen with their content centred, so
+     the trunk between them had most of a screen to cross and the two sets
+     of boxes were never on screen together. The fix is to move the content
+     within each stack, not to resize the stacks: the two trunk pieces only
+     meet if both stacks stay a full viewport tall (shrinking the upper one
+     leaves a visible break in the line). So the upper stack's content is
+     weighted toward the bottom and the lower stack's sits at the top,
+     which leaves the trunk only the space between them to cross. ---------- */
+  .phase--junction-out > .beat-stack {
+    padding-bottom: 2vh;
+  }
+  .phase--junction-in > .beat-stack {
+    justify-content: flex-start;
+    padding-top: 2vh;
+  }
+
+  .phase-label {
+    font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* A trunk runs down past this label on its way into the stage, and
+       lands on the text itself once the layout narrows. Only as wide as
+       its content, on an opaque ground, so the line passes behind it. */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px 12px;
+    background: #ffffff;
+    position: relative;
+    z-index: 2;
+  }
+  .phase-label::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    background: var(--signal-yellow);
+    flex: none;
+  }
+
+  .phase-lead {
+    max-width: 560px;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .phase-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  /* Investigation phase: main box and branch sit side by side (reveal
+     order via DOM: box, then note, then branch), with the note forced
+     onto its own full-width row underneath both via flex order. */
+  .phase-body--split .main-box { order: 1; }
+  .phase-body--split .branch { order: 2; align-self: center; }
+  .phase-body--split .phase-note { order: 3; flex-basis: 100%; margin: 0 auto; }
+
+  .phase-note {
+    max-width: 640px;
+    text-align: center;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--gray-text);
+  }
+  .phase-note p + p { margin-top: 12px; }
+  .note-list {
+    list-style: none;
+    margin-top: 14px;
+    text-align: left;
+  }
+  .note-list li {
+    position: relative;
+    padding-left: 22px;
+  }
+  .note-list li + li { margin-top: 10px; }
+  .discipline-types { margin-top: 24px; }
+  .discipline-types-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .discipline-types-cols {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    gap: 48px;
+    margin-top: 12px;
+    text-align: left;
+  }
+  .discipline-types-note { margin-top: 18px; }
+  .discipline-types h5 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .discipline-types .note-list { margin-top: 8px; }
+  .discipline-types .note-list li + li { margin-top: 4px; }
+  .note-list li::before {
+    content: '\2192';
+    position: absolute;
+    left: 0;
+    color: var(--gray-faint);
+    font-weight: 700;
+  }
+
+  /* ---------- Boxes ---------- */
+  .box {
+    border-radius: var(--radius);
+    padding: 22px 26px;
+  }
+
+  /* One treatment for every box on the spine, matching the investigation
+     boxes: full teal fill, tight padding, title only. */
+  .main-box {
+    background: var(--teal-fill);
+    border: 1.5px solid var(--teal-line);
+    width: 340px;
+    padding: 16px 18px;
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(35, 104, 91, 0.10);
+  }
+
+  .main-box h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .main-box h3:only-child { margin-bottom: 0; }
+  .main-box p {
+    font-size: 14.5px;
+    color: var(--gray-text);
+    line-height: 1.55;
+  }
+
+  .branch { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .branch-tag {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-faint);
+  }
+
+  /* Branch variant with a horizontal connector running out of the main
+     box's right side into the exit box, using the same connector-line +
+     chevron language as the vertical trunk, just rotated. */
+  .branch-arrow-row { display: flex; align-items: center; }
+  .branch-connector { width: 24px; height: 2px; background: var(--gray-faint); flex: none; }
+  .branch-chevron { width: 8px; height: 16px; color: var(--gray-faint); flex: none; margin-right: 10px; }
+  .branch-chevron svg { display: block; width: 100%; height: 100%; }
+  .exit-box {
+    background: var(--exit-fill);
+    border: 1.5px dashed var(--gray-faint);
+    width: 260px;
+    text-align: center;
+  }
+  .exit-box h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .exit-box p { font-size: 12.5px; color: var(--gray-text); }
+
+  .appeal-box {
+    background: #fff;
+    border: 1.5px dotted var(--teal-line);
+    width: 260px;
+    text-align: center;
+  }
+  .appeal-box h4 { font-size: 15px; font-weight: 700; color: var(--teal); margin-bottom: 4px; }
+  .appeal-box p { font-size: 12.5px; color: var(--gray-text); }
+
+  /* ---------- Challenging discipline: copy left, diagram right ---------- */
+  .challenge-grid {
+    order: 1;
+    flex-basis: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 48px;
+    align-items: start;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .challenge-copy {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: left;
+  }
+  .challenge-copy p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--gray-text);
+  }
+  .challenge-copy p + p { margin-top: 11px; }
+
+  /* Three columns: the spine boxes, the dotted spur, the settlement box.
+     Rows: grievance, the drop, arbitration. */
+  .challenge-diagram {
+    grid-column: 2;
+    grid-row: 1;
+    /* The copy is the taller column and sets the row height, so centre the
+       diagram against it rather than letting it sit at the top. */
+    align-self: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 46px 142px;
+    align-items: center;
+  }
+  .challenge-diagram .main-box { width: auto; grid-column: 1; }
+  .grievance-box { grid-row: 1; }
+  .arb-box { grid-row: 3; }
+
+  /* The drop from grievance down to arbitration. */
+  .arb-link {
+    grid-column: 1;
+    grid-row: 2;
+    height: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .arb-line {
+    flex: 1 1 auto;
+    width: 0;
+    border-left: 2px solid var(--gray-faint);
+    transform: scaleY(0);
+    transform-origin: top center;
+    transition: transform 0.55s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .arb-chevron {
+    flex: none;
+    width: 16px;
+    height: 8px;
+    color: var(--gray-faint);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .arb-chevron svg { display: block; width: 100%; height: 100%; }
+  .challenge-diagram.is-live .arb-line { transform: scaleY(1); transition-delay: 0.2s; }
+  .challenge-diagram.is-live .arb-chevron { opacity: 1; transition-delay: 0.7s; }
+
+  /* The dotted branch out to a settlement, drawn in on the same beat. */
+  .settle-link {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+  }
+  .settle-line {
+    flex: 1 1 auto;
+    height: 0;
+    border-top: 2px dotted var(--gray-faint);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .settle-chevron {
+    flex: none;
+    width: 8px;
+    height: 16px;
+    color: var(--gray-faint);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .settle-chevron svg { display: block; width: 100%; height: 100%; }
+  .settle-box {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 14px 12px;
+    border: 1.5px dashed var(--gray-faint);
+    border-radius: var(--radius);
+    background: var(--exit-fill);
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease 0.7s, transform 0.5s ease 0.7s;
+  }
+  /* The lines track the beat in both directions (is-live); the boxes they
+     point at stay put once revealed (is-visible). */
+  .challenge-diagram.is-live .settle-line { transform: scaleX(1); transition-delay: 0.3s; }
+  .challenge-diagram.is-live .settle-chevron { opacity: 1; transition-delay: 0.85s; }
+  .challenge-diagram.is-visible .settle-box { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .settle-line, .settle-chevron, .settle-box,
+    .arb-line, .arb-chevron { transition: none; }
+  }
+
+  /* The commission section sits below the grievance diagram, so it takes
+     an order after it rather than the default box/note slots. */
+  .cpc-subhead {
+    order: 2;
+    flex-basis: 100%;
+    margin-top: 16px;
+  }
+  .phase-body--split .cpc-box { order: 2; }
+  .phase-body--split .cpc-copy { order: 2; }
+
+  /* Short vertical connectors for the stacked phone layout, where the
+     drawn SVG links do not apply. Desktop hides the elements that use
+     them. */
+  .drop-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .drop-line {
+    flex: 1 1 auto;
+    width: 0;
+    border-left: 2px solid var(--gray-faint);
+    transform: scaleY(1);
+    transform-origin: top center;
+    transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .drop-chevron {
+    flex: none;
+    width: 16px;
+    height: 8px;
+    color: var(--gray-faint);
+    opacity: 1;
+    transition: opacity 0.25s ease;
+  }
+  .drop-chevron svg { display: block; width: 100%; height: 100%; }
+  /* Drawn by default. They are collapsed only while the beat that owns
+     them is genuinely still waiting its turn — if that element never
+     becomes a beat, the box shows and the line has to show with it,
+     otherwise the connection reads as an unexplained gap. */
+  .public-again.fade:not(.is-visible) .drop-line,
+  .chief-drop.fade:not(.is-visible) .drop-line { transform: scaleY(0); }
+  .public-again.fade:not(.is-visible) .drop-chevron,
+  .chief-drop.fade:not(.is-visible) .drop-chevron { opacity: 0; }
+  .public-again.is-visible .drop-line,
+  .chief-drop.is-visible .drop-line { transition-delay: 0.25s; }
+  .public-again.is-visible .drop-chevron,
+  .chief-drop.is-visible .drop-chevron { transition-delay: 0.7s; }
+  @media (prefers-reduced-motion: reduce) {
+    .drop-line, .drop-chevron { transition: none; }
+  }
+
+  /* Both are phone-only: on a wide screen these connections are the trunk
+     out of the entry grid and the drawn links into the chief's box. */
+  .public-again,
+  .chief-drop { display: none; }
+
+  /* ---------- Entry boxes (phase 1) ---------- */
+  .entry-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 920px;
+  }
+  /* Below about 940px the four boxes wrap. The row that wraps needs room
+     above it for the merge bar belonging to the row before, which would
+     otherwise land on top of it. A phone stacks them instead, and sets its
+     own spacing further down. */
+  @media (min-width: 641px) {
+    .entry-grid { row-gap: 44px; }
+    /* Never fewer than three to a row. Left to wrap freely the four boxes
+       go 2 + 2 between about 641 and 714px, which puts an entry box
+       directly in the path of the trunk running down to the department
+       investigation. Narrowing them keeps the wrap at 3 + 1, which the
+       merge is drawn for. */
+    /* Two classes deep so this still wins over the .entry-box width set
+       further down the stylesheet. */
+    .entry-grid .entry-box { width: min(210px, calc((100% - 34px) / 3)); }
+  }
+  .entry-box {
+    background: var(--entry-fill);
+    border: 1px solid var(--box-line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    width: 210px;
+    text-align: center;
+  }
+
+  /* ---------- Trunk lines between phases. Each connection is two
+     pieces that live inside the sticky stacks themselves, so the
+     browser scrolls them natively (no per-frame JS, no lag):
+       .trunk-out — in the upper stack, from the merge/box down to the
+                    stack's bottom edge
+       .trunk-in  — in the next stack, from its top edge down to just
+                    above the label, ending in the arrow
+     When the upper stack releases, its bottom edge is exactly where the
+     next stack begins, so the two pieces read as one unbroken line.
+     Their vertical offsets are set from layout in JS (layoutTrunks). ---------- */
+  .trunk-out, .trunk-in {
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--gray-faint);
+    transform: scaleY(0);
+    transform-origin: top;
+    pointer-events: none;
+  }
+  .trunk-out {
+    bottom: 0;
+    transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .trunk-in {
+    top: 0;
+    transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  /* Drawing in waits its turn; retracting does not. */
+  .trunk-out.is-drawn { transition-delay: 0.45s; }
+  .trunk-in.is-drawn { transition-delay: 1.05s; }
+  .trunk-out.is-drawn, .trunk-in.is-drawn { transform: scaleY(1); }
+  .trunk-arrow {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 16px;
+    height: 8px;
+    margin-left: -8px;
+    color: var(--gray-faint);
+  }
+  .trunk-arrow svg { display: block; width: 100%; height: 100%; }
+
+  /* Where a stage's flow leaves from a column instead of the centre line,
+     the outgoing trunk is an elbow drawn in SVG rather than the straight
+     .trunk-out bar (see buildExitElbow). */
+  .exit-elbow-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .exit-elbow {
+    fill: none;
+    stroke: var(--gray-faint);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dashoffset 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  /* ---------- Merge convergence: the short elbows where the entry
+     phase's boxes gather into the two investigation tracks. ---------- */
+  .merge-svg-wrap { width: 100%; max-width: 920px; position: relative; min-height: 26px; }
+
+  /* The caption that shows between the entry boxes and the merge. It is
+     absolutely positioned so it takes no layout space — the stack does
+     not shift when it goes — and it sits in the band the merge lines are
+     about to draw into. See the transient handling in update(). */
+  /* Subheadings: the beats that sit between the entry boxes, and the
+     criminal-track note under the investigation columns. */
+  .subhead,
+  .phase-transient {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  .phase-transient {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 620px;
+    pointer-events: none;
+  }
+
+  /* The two investigation tracks and the notes under them share one grid,
+     so each box sits squarely over its column of text. The middle column
+     carries the Internal Affairs note, between the two tracks. */
+  /* The internal track runs down the left in its own rows — copy, then the
+     chief's box and its copy — while the external track occupies the right
+     alongside all of them. The aside shares the chief's row; it is zero
+     height and absolutely positioned, and the two never show together. */
+  .investigation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 56px;
+    row-gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    align-items: start;
+  }
+  .inv-col--internal { grid-column: 1; grid-row: 1; }
+  .inv-col--external { grid-column: 2; grid-row: 1 / 4; }
+  /* Spans both columns so the aside centres on the chart rather than on the
+     internal column. It is zero height and its note is absolutely
+     positioned, so sharing the row costs the layout nothing. */
+  .investigation-grid .criminal-anchor { grid-column: 1 / -1; grid-row: 2; }
+  .investigation-grid .chief-box { grid-column: 1; grid-row: 2; }
+  .investigation-grid .chief-copy { grid-column: 1; grid-row: 3; }
+  .phase-body--split .investigation-grid { order: 1; }
+  .inv-col {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .investigation-grid .main-box {
+    width: auto;
+    /* .phase-body--split orders the boxes ahead of their notes; inside a
+       column that would stand the box below its own paragraph. */
+    order: 0;
+  }
+  .investigation-grid .main-box h3 { margin-bottom: 0; }
+  .inv-note {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--gray-text);
+    text-align: left;
+  }
+
+  /* The criminal track, centred under both columns. It is absolutely
+     positioned off a zero-height anchor so that it reserves no space:
+     the review-board copy below sits in the same band, and the two
+     cross-fade as the beat turns over. */
+  .criminal-anchor {
+    order: 1;
+    flex-basis: 100%;
+    position: relative;
+    height: 0;
+  }
+  .criminal-note {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+    pointer-events: none;
+  }
+  /* When the stage is too tall to pace (short window, or phone layout) the
+     beats reveal by scroll position instead and nothing can hand off, so
+     the aside drops back into the flow and simply stays. */
+  .phase.is-unpaced .criminal-anchor { height: auto; }
+  .phase.is-unpaced .criminal-note {
+    position: static;
+    pointer-events: auto;
+    margin-bottom: 8px;
+  }
+  .criminal-note .subhead,
+  .phase-note .subhead { margin-bottom: 14px; }
+  .criminal-note p:not(.subhead) {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--gray-text);
+  }
+  .criminal-note p:not(.subhead) + p { margin-top: 12px; }
+
+  /* Review-board copy, aligned to the external column by repeating the
+     investigation grid's two-column template. */
+  .cprb-note { text-align: left; }
+
+  /* The chief's step, directly under the copy above it; the extra top
+     margin leaves room for the connector drawn into it. */
+  .chief-box { margin-top: 26px; }
+  .chief-copy { text-align: left; }
+  .chief-copy p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--gray-text);
+  }
+  .chief-copy p + p { margin-top: 10px; }
+
+  /* Connectors into the chief box, drawn over the stage body. */
+  .chief-links {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .chief-link {
+    fill: none;
+    stroke: var(--gray-faint);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dashoffset 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .chief-head {
+    fill: none;
+    stroke: var(--gray-faint);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .chief-link, .chief-head { transition-delay: 0s; }
+  @media (prefers-reduced-motion: reduce) {
+    .chief-link, .chief-head { transition: none; }
+  }
+  .cprb-note p,
+  .cprb-note li {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--gray-text);
+  }
+  .cprb-note p + p,
+  .cprb-note ul,
+  .cprb-note ul + p { margin-top: 10px; }
+  .cprb-note ul { list-style: none; }
+  .cprb-note li + li { margin-top: 6px; }
+  .cprb-note li b { color: var(--ink); }
+  .inv-note strong,
+  .phase-note strong { color: var(--ink); }
+  /* Out of the flow: the svg reaches up over the entry grid so a box
+     that has wrapped to a second row still gets its own riser, while the
+     wrap keeps the 26px of layout height the merge alone used to take. */
+  .merge-svg { display: block; width: 100%; overflow: visible;
+               position: absolute; pointer-events: none; }
+  .merge-path {
+    fill: none;
+    stroke: var(--gray-faint);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  /* ---------- Discipline matrix (Corrective action stage). Its colors
+     are scoped here as --m-* so they don't override the page palette. ---------- */
+  .matrix {
+    /* The chart inside has a min-width so its labels stay legible; without
+       this it would widen the whole stage instead of scrolling on its own. */
+    min-width: 0;
+    --m-teal-fill:   #daeae5;
+    --m-teal-line:   #51a89a;
+    --m-yellow-fill: #fbf0c8;
+    --m-yellow-line: #f4c913;
+    --m-yellow-text: #f4c913;
+    --m-red:         #d64d4d;
+    --m-red-text:    #d64d4d;
+    --m-red-fill:    #fce9e9;
+    --m-red-line:    #d64d4d;
+    --m-ink:         #404F54;
+    --m-gray:        #404F54;
+    --m-gray-text:   #879599;
+    --m-gray-faint:  #879599;
+    --m-grid:        #ccd8db;
+    width: 100%;
+    max-width: 860px;
+    margin: 12px auto 0;
+    text-align: left;
+  }
+  .phase-body--split .matrix { order: 4; flex-basis: 100%; }
+  .matrix-heading {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--m-gray);
+    line-height: 1.3;
+  }
+  .matrix-sub {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--m-gray);
+    opacity: 0.72;
+    line-height: 1.5;
+    margin: 4px 0 16px;
+  }
+  .matrix-scroll { overflow-x: auto; min-width: 0; }
+  .matrix-sub.matrix-mid { opacity: 1; color: var(--m-gray-text); margin: 20px 0 0; }
+  .matrix-list { font-size: 14px; line-height: 1.55; color: var(--m-gray-text); margin: 10px 0 24px; }
+  .matrix-list li + li { margin-top: 6px; }
+  .matrix-scroll--wide svg {
+    display: block;
+    width: 100%;
+    min-width: 700px;   /* the wide chart would be unreadable squeezed down */
+  }
+  /* The narrow chart is drawn to fit, so it never needs to scroll. */
+  .matrix-scroll--narrow { display: none; }
+
+  /* Type in an SVG is sized in user units, so the labels set for the
+     860-unit chart come out far too large in the 320-unit one. */
+  .matrix .matrix-scroll--narrow .zone-label {
+    font-size: 7px;
+    letter-spacing: 0.06em;
+  }
+  .matrix .matrix-scroll--narrow .col-head { font-size: 8px; }
+  .matrix .matrix-scroll--narrow .grp-eyebrow { font-size: 8.5px; }
+  .matrix .matrix-scroll--narrow .m-kicker { font-size: 8px; }
+  .matrix .matrix-scroll--narrow .factor-ex { font-size: 8px; }
+
+  /* The group descriptions, shown above the narrow chart. */
+  .matrix-key { display: none; margin-bottom: 18px; }
+  .matrix-key-item {
+    position: relative;
+    padding-left: 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--m-gray-text);
+  }
+  .matrix-key-item + .matrix-key-item { margin-top: 12px; }
+  .matrix-key-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    bottom: 3px;
+    width: 3px;
+    border-radius: 2px;
+  }
+  .matrix-key-item--one::before   { background: var(--m-teal-line); }
+  .matrix-key-item--two::before   { background: var(--m-yellow-line); }
+  .matrix-key-item--three::before { background: var(--m-red-line); }
+  .matrix-key-tag {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+  .matrix-key-item--one .matrix-key-tag   { color: var(--teal); }
+  .matrix-key-item--two .matrix-key-tag   { color: var(--m-yellow-text); }
+  .matrix-key-item--three .matrix-key-tag { color: var(--m-red-text); }
+  .matrix-key-item strong { color: var(--m-ink); }
+  .matrix-scroll--narrow svg {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+  .matrix svg text { font-family: var(--font-display); }
+  .matrix .m-kicker {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.11em;
+    fill: var(--m-gray);
+    opacity: 0.75;
+  }
+  .matrix .zone-label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    fill: var(--m-gray-faint);
+  }
+  .matrix .col-head    { font-size: 11.5px; font-weight: 600; fill: var(--m-gray-text); }
+  .matrix .grp-eyebrow {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.11em;
+  }
+  .matrix .grp-title   { font-size: 13.5px; font-weight: 700; fill: var(--m-ink); }
+  .matrix .grp-ex,
+  .matrix .factor-ex   { font-size: 11.5px; font-weight: 400; fill: var(--m-gray-text); }
+  .matrix-note {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--m-gray-text);
+    margin-top: 20px;
+  }
+  .matrix-note a,
+  .phase-note a {
+    color: var(--teal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .matrix-note a:hover,
+  .phase-note a:hover { color: var(--ink); }
+
+  /* Mitigating/aggravating lines draw outward from the range dot once the
+     matrix beat is revealed and on screen (see animateMatrix in the script). */
+  .matrix .factor-line { transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+  .matrix .arrow-path { opacity: 0; transition: opacity 0.2s ease; }
+  .matrix .range-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .matrix .factor-line, .matrix .arrow-path, .matrix .range-dot { transition: none; }
+  }
+
+  /* ---------- Reveal-on-scroll ----------
+     The connectors are positioned from getBoundingClientRect, which counts
+     the fade-in transform below — so a beat still waiting to appear reads
+     18px low and lines drawn to it land inside the box. layoutAll measures
+     inside this class, where the transforms are off. ---------- */
+  html.viz-measuring .fade {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .fade {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+
+  /* ---------- Without JavaScript ----------
+     Everything above hides a beat until the engine reveals it, and the
+     stages are sized for scroll choreography. With no script none of that
+     runs, so the whole thing reads as an ordinary document instead: every
+     beat visible, the stages at their natural height, the two asides in
+     the flow rather than overlaid, and the drawn connectors dropped, since
+     they are decorative and are positioned by script. ---------- */
+  html:not(.viz-js) .fade { opacity: 1; transform: none; }
+  html:not(.viz-js) .phase { min-height: 0; }
+  html:not(.viz-js) .beat-stack {
+    position: static;
+    min-height: 0;
+    padding: 28px 20px;
+  }
+  html:not(.viz-js) .criminal-anchor { height: auto; }
+  html:not(.viz-js) .criminal-note,
+  html:not(.viz-js) .phase-transient {
+    position: static;
+    max-width: 620px;
+    margin: 18px auto 0;
+  }
+  html:not(.viz-js) .trunk-out,
+  html:not(.viz-js) .trunk-in,
+  html:not(.viz-js) .merge-svg-wrap svg,
+  html:not(.viz-js) .exit-elbow-svg,
+  html:not(.viz-js) .chief-links,
+  html:not(.viz-js) .drop-link { display: none; }
+  /* The aside shares a grid cell with the chief's box, which only works
+     while it is absolutely positioned. In the flow they would sit on top
+     of each other, so the grid runs as a single column here and markup
+     order carries the sequence. */
+  html:not(.viz-js) .investigation-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  html:not(.viz-js) .investigation-grid > * {
+    grid-row: auto;
+    grid-column: auto;
+  }
+  html:not(.viz-js) .settle-box { opacity: 1; transform: none; }
+  html:not(.viz-js) .matrix .range-dot { transform: scale(1); }
+  html:not(.viz-js) .matrix .arrow-path { opacity: 1; }
+  .fade.is-visible { opacity: 1; transform: translateY(0); }
+
+  /* A lead that doubles as a subheading takes the smaller subhead type. */
+  .phase-lead.subhead { font-size: 22px; }
+
+  /* The lead line gets a bigger, slower rise so it clearly scrolls in on its own beat. */
+  .phase-lead.fade {
+    transform: translateY(56px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .phase-lead.fade.is-visible { transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ---------- Example walkthrough (card slideshow in the Chief stage) ---------- */
+  .phase-body--split .ex-card { order: 3; flex-basis: 100%; }
+  .ex-card {
+    --ex-ink:   #404f54;
+    --ex-muted: #879599;
+    --ex-bg:    #f4f0e6;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2.4rem 2.6rem 1.6rem;
+    text-align: left;
+    background: var(--ex-bg);
+    border: 1px solid var(--ex-ink);
+    box-shadow: 3px 4px 0 0 rgba(43, 41, 38, .85);
+  }
+  .ex-title {
+    margin: 0 0 1rem;
+    padding: 0 0 1rem;
+    border-bottom: 2px dotted var(--ex-muted);
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--ex-ink);
+  }
+  .ex-slide { animation: ex-fade .28s ease both; }
+  .ex-slide[hidden] { display: none; }
+  @keyframes ex-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .ex-step {
+    margin: .4rem 0 1rem;
+    font-family: var(--font-heading);
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: var(--ex-ink);
+  }
+  .ex-body {
+    font-size: 1.06rem;
+    line-height: 1.62;
+    color: var(--ex-ink);
+  }
+  .ex-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.8rem;
+  }
+  .ex-count {
+    flex: 1 1 auto;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    letter-spacing: .01em;
+    color: var(--ex-muted);
+  }
+  .ex-btn {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--ex-ink);
+    border-radius: 50%;
+    color: var(--ex-ink);
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease, opacity .15s ease;
+  }
+  .ex-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ex-btn:hover { background: var(--ex-ink); color: var(--ex-bg); }
+  .ex-btn:focus-visible { outline: 2px solid var(--ex-ink); outline-offset: 2px; }
+  .ex-btn[disabled] { opacity: 0; pointer-events: none; }
+  @media (max-width: 520px) {
+    .ex-card { padding: 1.8rem 1.5rem 1.2rem; }
+    .ex-title { font-size: 1.25rem; }
+    .ex-step { font-size: 1.08rem; }
+    .ex-body { font-size: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ex-slide { animation: none; }
+  }
+
+  @media (max-width: 640px) {
+    .discipline-types-cols { grid-template-columns: auto; gap: 18px; }
+    .matrix-heading { font-size: 20px; }
+    /* Swap in the chart that fits, and drop the one that would scroll. */
+    .matrix-scroll--wide { display: none; }
+    .matrix-scroll--narrow { display: block; }
+    .matrix-key { display: block; }
+    .phase { min-height: 130vh; }
+    .phase.phase--tall { min-height: 190vh; }
+    .beat-stack { padding: 5vh 18px; gap: 18px; }
+    /* The heading and lead above the entry boxes outweigh the short merge
+       below them, so centring the stack as a whole leaves the boxes riding
+       low. The extra bottom padding lifts the block until the boxes
+       themselves sit on the middle of the screen. */
+    .phase--junction-out > .beat-stack { padding-bottom: 13vh; }
+    .phase--junction-in > .beat-stack { padding-top: 5vh; }
+    /* Running copy reads better ranged left in a narrow column. Headings
+       and subheadings keep their own alignment, since they set it on
+       themselves rather than inheriting it. */
+    .phase-note,
+    .chief-copy,
+    .criminal-note { text-align: left; }
+
+    .phase-lead { font-size: 1.5em; }
+    .main-box, .exit-box, .appeal-box, .entry-box { width: 100%; max-width: 340px; }
+
+    /* Stacked, the boxes are spaced with margins rather than a grid gap, so
+       that a box which steps aside takes its spacing with it and everything
+       below closes up into the space. */
+    .entry-grid { gap: 0; }
+    .entry-grid .entry-box + .entry-box { margin-top: 14px; }
+    .entry-box[data-fade-out-narrow] {
+      overflow: hidden;
+      max-height: 300px;
+      transition: opacity 0.45s ease, transform 0.45s ease,
+                  max-height 0.45s ease, margin-top 0.45s ease,
+                  padding-top 0.45s ease, padding-bottom 0.45s ease,
+                  border-top-width 0.45s ease, border-bottom-width 0.45s ease;
+    }
+    .entry-box.is-collapsed {
+      max-height: 0;
+      margin-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-top-width: 0;
+      border-bottom-width: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .entry-box[data-fade-out-narrow] { transition: none; }
+    }
+    /* Stacked, the markup order is already the sequence we want: internal
+       track, the public complaint rejoining, external track, the criminal
+       aside, then the chief's step. */
+    .investigation-grid {
+      display: flex;
+      flex-direction: column;
+      row-gap: 14px;
+    }
+    .investigation-grid > * { grid-column: auto; grid-row: auto; }
+    .chief-box { margin-top: 0; }
+    /* One column per cell already, so stacking the grid interleaves each
+       note with the box above it. */
+    .investigation-grid .main-box { width: 100%; }
+    .public-again {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 22px;
+    }
+    /* The link needs a height of its own: the line inside grows to fill it,
+       so without one only the arrowhead shows. */
+    .public-link { height: 54px; }
+    /* Inside the grid now, so it just takes its place in the column. The
+       column aligns its items to the start, so this has to stretch for its
+       centred line and arrowhead to land in the middle. */
+    .chief-drop {
+      display: flex;
+      align-self: stretch;
+      height: 46px;
+      margin-bottom: -6px;
+    }
+    /* Stacked, the aside belongs in the flow between the external track and
+       the chief's step, not parked over the column as it is on desktop. */
+    /* The grid keeps align-items: start from its desktop rules, so as a
+       flex column it leaves anything with a width cap sitting against the
+       left edge. Stretching the anchor gives the note the full column to
+       centre its own max-width in. */
+    .criminal-anchor { height: auto; order: 0; align-self: stretch; }
+    .criminal-note { position: static; }
+    .public-again .entry-box { width: 100%; max-width: 340px; }
+    /* The grids no longer cap themselves, so the boxes inside them keep
+       their own cap and stay centred rather than stretching with the copy. */
+    .investigation-grid .main-box { max-width: 340px; margin-left: auto; margin-right: auto; }
+    /* One centred trunk on a phone, so the second would only double the
+       first exactly. */
+    .trunk--external { display: none; }
+    .challenge-grid {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+    .challenge-copy, .challenge-diagram { grid-column: 1; grid-row: auto; }
+    /* The grid no longer caps itself, so the diagram keeps its own width
+       and centres: letting it stretch would only pull the settlement spur
+       away from the grievance box it comes out of. */
+    .challenge-diagram { max-width: 340px; margin-left: auto; margin-right: auto; }
+    /* The spur still comes out of the side of the grievance box, as on
+       desktop — just narrower. Stacking it would park the settlement under
+       arbitration, which reads as a step rather than an alternative. */
+    .challenge-diagram { grid-template-columns: minmax(0, 1fr) 28px 104px; }
+    .challenge-diagram .main-box { width: auto; }
+    .settle-link { width: auto; }
+    .settle-chevron { width: 7px; height: 14px; }
+    .settle-box {
+      width: auto;
+      padding: 10px 8px;
+      font-size: 13px;
+    }
+    .inv-col + .inv-col { margin-top: 10px; }
+    .criminal-note { max-width: 340px; }
+    .chief-links { display: none; }
+    .subhead, .phase-transient { font-size: 18px; }
+    .phase-body { gap: 18px; }
+  }
+</style>
+
+<script>
+  /* Set before first paint: the scrolly hides each beat until the engine
+     reveals it, so the hidden state is applied only when scripting is
+     actually available. Without this class the page renders as a plain,
+     fully visible document -- see "Without JavaScript" in the stylesheet.
+
+     The engine drops the class again if it throws. That only helps once
+     the engine has PARSED, though: paste this into a CMS that escapes or
+     strips inline script and the engine never runs at all, leaving every
+     beat hidden and the page apparently empty. So the fallback is armed
+     here instead, and the engine has to say it started. Deliberately free
+     of the characters a CMS is most likely to escape. */
+  document.documentElement.classList.add('viz-js');
+  // The engine is a separate file. If it fails to load -- blocked, moved,
+  // offline -- say so at once rather than leaving the stages blank until
+  // the timer below gives up on it.
+  window.addEventListener('error', function (e) {
+    var t = e.target;
+    if (t && t.tagName === 'SCRIPT' && !window.vizFlowStarted) {
+      document.documentElement.classList.remove('viz-js');
+    }
+  }, true);
+  window.setTimeout(function () {
+    if (window.vizFlowStarted) { return; }
+    document.documentElement.classList.remove('viz-js');
+    if (window.console) {
+      window.console.error('discipline flow: the engine never started -- '
+        + 'showing the plain rendering. The inline script was probably '
+        + 'altered or removed in transit.');
+    }
+  }, 4000);
+</script>
+
+<div class="viz-container">
+
+  <!-- ===== Table of contents ===== -->
+  <!-- No headline or byline here: inside the WordPress post the theme's
+       .entry-header carries the real <h1>, the subtitle and the byline.
+       This block starts at the contents so the page has one of each.
+       The standfirst that used to sit here now belongs in the post's
+       subtitle field:
+       "The Cleveland police discipline process is complicated and involves
+        quite a few steps. Here's a general overview of how it works." -->
+  <header class="toc">
+    <p class="toc-dek">Scroll to follow the whole path, or jump to a stage.</p>
+
+    <nav aria-labelledby="toc-contents-label">
+      <p class="toc-contents-label" id="toc-contents-label">Contents</p>
+      <ol class="toc-steps">
+        <li class="toc-step">
+          <a class="toc-card" href="#stage-begins">
+            <span class="toc-num">1</span>
+            <span class="toc-name">How a case begins</span>
+            <span class="toc-note">A complaint or report of misconduct</span>
+          </a>
+          <span class="toc-join" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none"><path d="M0 6H25" stroke="currentColor" stroke-width="2"/><path d="M26 2L31 6L26 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </li>
+        <li class="toc-step">
+          <a class="toc-card" href="#stage-investigation">
+            <span class="toc-num">2</span>
+            <span class="toc-name">Investigation</span>
+            <span class="toc-note">A supervisor, internal affairs or a civilian office</span>
+          </a>
+          <span class="toc-join" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none"><path d="M0 6H25" stroke="currentColor" stroke-width="2"/><path d="M26 2L31 6L26 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </li>
+        <li class="toc-step">
+          <a class="toc-card" href="#stage-hearing">
+            <span class="toc-num">3</span>
+            <span class="toc-name">Discipline hearing</span>
+            <span class="toc-note">Evidence weighed, discipline recommended</span>
+          </a>
+          <span class="toc-join" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none"><path d="M0 6H25" stroke="currentColor" stroke-width="2"/><path d="M26 2L31 6L26 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </li>
+        <li class="toc-step">
+          <a class="toc-card" href="#stage-decision">
+            <span class="toc-num">4</span>
+            <span class="toc-name">Decision</span>
+            <span class="toc-note">Corrective action, from counseling to termination</span>
+          </a>
+          <span class="toc-join" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none"><path d="M0 6H25" stroke="currentColor" stroke-width="2"/><path d="M26 2L31 6L26 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </li>
+        <li class="toc-step">
+          <a class="toc-card" href="#stage-challenging">
+            <span class="toc-num">5</span>
+            <span class="toc-name">Challenging discipline</span>
+            <span class="toc-note">Grievance, arbitration and the police commission</span>
+          </a>
+        </li>
+      </ol>
+    </nav>
+
+    <p class="toc-download">
+      <a href="police-discipline-flowchart-letter.pdf" target="_blank" rel="noopener">Full, printable Cleveland police discipline flow chart</a>
+    </p>
+
+
+  </header>
+
+
+  <!-- ===== How a case begins ===== -->
+  <section class="phase phase--tall phase--junction-out" id="stage-begins">
+    <div class="beat-stack">
+      <p class="phase-label fade">How the discipline process starts</p>
+      <p class="phase-lead fade">There's a complaint or report of misconduct. This can start with&hellip;</p>
+      <!-- data-route picks which investigation track each source merges
+           into; see splitTargets / buildConvergence in the script. -->
+      <div class="entry-grid">
+        <div class="entry-box fade" data-route="internal">A supervisor identifies a possible rule or policy violation</div>
+        <div class="entry-box fade" data-route="internal">Another officer or city employee reports possible misconduct</div>
+        <div class="entry-box fade" data-route="internal">Someone reports possible criminal misconduct</div>
+        <!-- On a phone this box rejoins further down, above the external
+             track, so it steps aside once the second caption lands — a beat
+             before the trunk sets off. -->
+        <div class="entry-box fade" data-route="external"
+             data-fade-out-narrow=".caption--last">A member of the public files a complaint</div>
+      </div>
+      <div class="merge-svg-wrap">
+        <p class="phase-transient fade beat--transient">Not every complaint or investigation leads to discipline</p>
+        <p class="phase-transient caption--last fade beat--transient">Who reported the conduct and what it involves help determine who investigates</p>
+        <svg class="merge-svg"></svg>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== Investigation ===== -->
+  <section class="phase phase--junction-in phase--paced" id="stage-investigation"
+           data-trunk-elbow=".chief-copy">
+    <div class="beat-stack">
+      <p class="phase-label fade">Investigation &amp; review</p>
+      <div class="phase-body phase-body--split">
+        <!-- Each column is a single cell, so the review-board copy sits
+             directly under the paragraph above it rather than below the
+             whole grid. Beats cannot follow markup order here (that copy is
+             nested in the grid, ahead of the aside that precedes it on
+             screen), so they are numbered with data-beat-order. -->
+        <div class="investigation-grid fade" data-fade="wide" data-beat-order="1">
+          <!-- On a phone the columns stack, and each one takes its own beat so
+               the two tracks arrive in turn instead of together. -->
+          <div class="inv-col inv-col--internal" data-fade="narrow" data-beat-order="1.1">
+            <div class="main-box" data-route="internal">
+              <h3>Department investigation</h3>
+            </div>
+            <p class="inv-note">Police supervisors investigate some lower-level policy violations, such as misuse of sick time or improper use of a body camera. The investigation moves through the chain of command to the police chief. At each step, supervisors review whether the alleged violations were properly identified and investigated. They can request more information, correct details or add, remove or change alleged violations.</p>
+            <!-- Phones only: the public complaint comes back here to feed the
+                 external track, since the stacked column cannot show the line
+                 running down beside the others. Hidden from assistive tech,
+                 as the same box was already read out in the stage above. -->
+            <div class="public-again beat--nested" data-fade="narrow" data-beat-order="1.2" aria-hidden="true">
+              <div class="entry-box">A member of the public files a complaint</div>
+              <span class="drop-link public-link">
+                <span class="drop-line"></span>
+                <span class="drop-chevron"><svg viewBox="0 0 16 8" fill="none"><path d="M2 0L8 8L14 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </span>
+            </div>
+          </div>
+          <div class="inv-col inv-col--external" data-fade="narrow" data-beat-order="1.3">
+            <div class="main-box" data-route="external">
+              <h3>External investigation</h3>
+            </div>
+            <p class="inv-note"><strong>The Office of Professional Standards</strong>, a civilian office outside the police department, investigates noncriminal complaints from members of the public.</p>
+            <div class="cprb-note fade beat--nested beat--reversible" data-fade="wide" data-beat-order="3">
+              <p>The Office of Professional Standards sends its findings and recommendations to the <strong>Civilian Police Review Board</strong>, an independent group of residents appointed by the mayor and City Council.</p>
+              <p>The board reviews the investigation and makes its findings at a public meeting. Possible findings for each allegation include:</p>
+              <ul>
+                <li><b>Sustained:</b> The evidence supports the allegation.</li>
+                <li><b>Unfounded:</b> The alleged conduct did not occur.</li>
+                <li><b>Insufficient evidence:</b> There is not enough evidence to prove or disprove the allegation.</li>
+                <li><b>Exonerated:</b> The conduct occurred but did not violate policy.</li>
+              </ul>
+              <p>If the board finds a violation and recommends discipline, the employee gets an opportunity to respond at a discipline hearing.</p>
+            </div>
+          </div>
+        <!-- The aside hangs off a zero-height anchor so it holds no layout
+               space and leaves no hole when it clears. -->
+          <div class="criminal-anchor">
+            <div class="criminal-note fade beat--nested beat--transient" data-beat-order="2">
+              <p class="subhead">Internal Affairs Unit investigates possible crimes and more serious allegations of misconduct. </p>
+              <p>A prosecutor reviews the criminal investigation and decides whether to file charges.</p>
+              <p>Criminal charges and department discipline are separate processes. An employee can face discipline for violating policy even if no criminal charges are filed. The discipline process can also proceed while criminal charges are pending.</p>
+            </div>
+          </div>
+
+          <!-- Both tracks feed the chief's review, so it sits below them both
+               and the connectors gather into it (see buildChiefLinks). -->
+          <span class="chief-drop drop-link beat--nested" data-fade="narrow" data-beat-order="3.9" aria-hidden="true">
+            <span class="drop-line"></span>
+            <span class="drop-chevron"><svg viewBox="0 0 16 8" fill="none"><path d="M2 0L8 8L14 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
+          <div class="main-box chief-box fade beat--nested beat--reversible" data-beat-order="4">
+            <h3>Chief of Police review and charging letter</h3>
+          </div>
+          <div class="chief-copy fade beat--nested beat--reversible" data-beat-order="5">
+            <p>In most cases, the police chief reviews the investigation and decides how to proceed. If there is enough evidence of a policy violation, the chief may address it through verbal counseling or issue a &ldquo;charging letter&rdquo; to begin the formal discipline process.</p>
+            <p>The letter outlines the city&rsquo;s account of what happened and the alleged policy violations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== Disciplinary Hearing ===== -->
+  <section class="phase" id="stage-hearing">
+    <div class="beat-stack">
+      <p class="phase-label fade">Disciplinary hearing</p>
+      <div class="phase-body phase-body--split">
+        <div class="main-box fade">
+          <h3>Pre-disciplinary hearing</h3>
+        </div>
+        <div class="phase-note fade">
+          <p>Before discipline is imposed, the employee can respond with evidence, defenses or witnesses. The employee can also waive the hearing.</p>
+          <p>At a discipline hearing, a hearing officer &mdash; usually a deputy chief or assistant public safety director &mdash; reviews the evidence to decide whether it is more likely than not that misconduct occurred.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== Corrective action ===== -->
+  <section class="phase" id="stage-decision">
+    <div class="beat-stack">
+      <p class="phase-label fade">Discipline decision</p>
+      <div class="phase-body phase-body--split">
+        <div class="main-box fade">
+          <h3>Corrective action</h3>
+        </div>
+        <div class="phase-note fade">
+          <p class="subhead">Who decides the consequences?</p>
+          <p>If an employee is found to have violated policy, officials determine the consequence. The city calls this &ldquo;corrective action,&rdquo; which includes both formal discipline and steps that are not considered discipline.</p>
+          <p>The chief generally decides cases involving suspensions of 10 days or less. The public safety director decides cases that could result in longer suspensions or termination.</p>
+          <p><strong>For complaints from the public</strong>, the Civilian Police Review Board recommends discipline to the chief. Under the city charter, the chief must follow the board&rsquo;s findings and recommendations unless there is clear and convincing evidence that they are clearly wrong.</p>
+          <p>If the chief disagrees with the board's recommendation, they can make an argument to change it but the board can overrule that and order discipline imposed. The Community Police Commission can also decide to review the discipline.</p>
+          <div class="discipline-types">
+            <h4 class="discipline-types-title">Types of discipline</h4>
+            <div class="discipline-types-cols">
+              <div>
+                <h5>Non-disciplinary corrective action</h5>
+                <ul class="note-list">
+                  <li>Verbal counseling</li>
+                  <li>Letter of reinstruction</li>
+                  <li>Remedial training</li>
+                </ul>
+              </div>
+              <div>
+                <h5>Formal discipline</h5>
+                <ul class="note-list">
+                  <li>Written reprimand</li>
+                  <li>Unpaid suspension</li>
+                  <li>Demotion</li>
+                  <li>Termination</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Discipline matrix: its own beat, full-width under the note -->
+        <div class="matrix fade">
+          <h3 class="matrix-heading">Violations are ranked in three groups with a sliding scale of consequences</h3>
+          <p class="matrix-sub">The department uses a discipline matrix &mdash; a chart that sets penalty ranges for different violations &mdash; to guide these decisions.</p>
+
+          <div class="matrix-scroll matrix-scroll--wide">
+            <svg viewBox="0 0 860 450" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="Chart of the discipline matrix. Penalties run from counseling and retraining, which are non-disciplinary, through written reprimand, unpaid suspension, demotion and termination. Group I covers less serious violations with limited impact on the department or public, and typically ranges from counseling to a written reprimand. Group II covers more serious violations that interfere with the department's mission or risk public or officer safety, and ranges from reprimand to suspension. Group III covers the most serious violations, including abuses of authority, excessive force, dishonesty and discrimination, and ranges from suspension to termination.">
+
+              <!-- Zone labels across the top -->
+              <text class="zone-label" x="302" y="12" text-anchor="middle">NON-DISCIPLINARY</text>
+              <text class="zone-label" x="612" y="12" text-anchor="middle">FORMAL DISCIPLINE</text>
+
+              <!-- Boundary between non-disciplinary and formal discipline -->
+              <line x1="364" y1="20" x2="364" y2="445" stroke="var(--m-gray-faint)" stroke-width="1" stroke-dasharray="4,3"/>
+
+              <!-- Column headers (penalty scale) -->
+              <text class="col-head" x="302" y="40" text-anchor="middle">Counseling &amp;</text>
+              <text class="col-head" x="302" y="55" text-anchor="middle">retraining</text>
+              <text class="col-head" x="426" y="40" text-anchor="middle">Written</text>
+              <text class="col-head" x="426" y="55" text-anchor="middle">reprimand</text>
+              <text class="col-head" x="550" y="40" text-anchor="middle">Unpaid</text>
+              <text class="col-head" x="550" y="55" text-anchor="middle">suspension</text>
+              <text class="col-head" x="674" y="47" text-anchor="middle">Demotion</text>
+              <text class="col-head" x="798" y="47" text-anchor="middle">Termination</text>
+
+              <!-- Grid -->
+              <line x1="240" y1="70" x2="240" y2="445" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="488" y1="70" x2="488" y2="445" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="612" y1="70" x2="612" y2="445" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="736" y1="70" x2="736" y2="445" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="859" y1="70" x2="859" y2="445" stroke="var(--m-grid)" stroke-width="1"/>
+
+              <!-- Group I -->
+              <text class="grp-eyebrow" x="0" y="88" fill="var(--teal)">GROUP I</text>
+              <text class="grp-title" x="0" y="108">Less serious violations</text>
+              <text class="grp-ex" x="0" y="127">that generally have a limited impact on</text>
+              <text class="grp-ex" x="0" y="142">the department or public, such as</text>
+              <text class="grp-ex" x="0" y="157">tardiness, discourtesy or some</text>
+              <text class="grp-ex" x="0" y="172">reporting errors.</text>
+              <rect x="252" y="115" width="224" height="34" rx="8" fill="var(--m-teal-fill)" stroke="var(--m-teal-line)" stroke-width="1.5"/>
+
+              <!-- Group II -->
+              <text class="grp-eyebrow" x="0" y="213" fill="var(--m-yellow-text)">GROUP II</text>
+              <text class="grp-title" x="0" y="233">More serious violations</text>
+              <text class="grp-ex" x="0" y="252">that interfere with the department&#8217;s</text>
+              <text class="grp-ex" x="0" y="267">mission or create significant risks to</text>
+              <text class="grp-ex" x="0" y="282">public or officer safety.</text>
+              <rect x="376" y="240" width="224" height="34" rx="8" fill="var(--m-yellow-fill)" stroke="var(--m-yellow-line)" stroke-width="1.5"/>
+
+              <!-- Group III -->
+              <text class="grp-eyebrow" x="0" y="338" fill="var(--m-red-text)">GROUP III</text>
+              <text class="grp-title" x="0" y="358">The most serious violations</text>
+              <text class="grp-ex" x="0" y="377">including serious abuses of authority,</text>
+              <text class="grp-ex" x="0" y="392">unethical conduct, excessive force,</text>
+              <text class="grp-ex" x="0" y="407">dishonesty, discrimination and some</text>
+              <text class="grp-ex" x="0" y="422">criminal offenses.</text>
+              <rect x="500" y="365" width="350" height="34" rx="8" fill="var(--m-red-fill)" stroke="var(--m-red-line)" stroke-width="1.5"/>
+
+            </svg>
+          </div>
+          <!-- Narrow screens: the group descriptions sit above the whole
+               chart as text, and the chart below carries just the scale and
+               the three ranges. Keep these in step with the wide chart. -->
+          <div class="matrix-key">
+            <p class="matrix-key-item matrix-key-item--one">
+              <span class="matrix-key-tag">Group I</span>
+              <strong>Less serious violations</strong> that generally have a limited impact on the department or public, such as tardiness, discourtesy or some reporting errors.
+            </p>
+            <p class="matrix-key-item matrix-key-item--two">
+              <span class="matrix-key-tag">Group II</span>
+              <strong>More serious violations</strong> that interfere with the department&rsquo;s mission or create significant risks to public or officer safety.
+            </p>
+            <p class="matrix-key-item matrix-key-item--three">
+              <span class="matrix-key-tag">Group III</span>
+              <strong>The most serious violations</strong> including serious abuses of authority, unethical conduct, excessive force, dishonesty, discrimination and some criminal offenses.
+            </p>
+          </div>
+          <div class="matrix-scroll matrix-scroll--narrow">
+            <svg viewBox="0 0 320 156" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="The penalty ranges for each group, read against the scale above: Group I runs from counseling and retraining to a written reprimand, Group II from written reprimand to unpaid suspension, and Group III from unpaid suspension to termination.">
+
+              <text class="zone-label" x="40" y="9" text-anchor="middle">NON-DISCIPLINARY</text>
+              <text class="zone-label" x="200" y="9" text-anchor="middle">FORMAL DISCIPLINE</text>
+              <line x1="80" y1="14" x2="80" y2="156" stroke="var(--m-gray-faint)" stroke-width="1" stroke-dasharray="3,2"/>
+
+              <text class="col-head" x="40" y="26" text-anchor="middle">Counseling &amp;</text>
+              <text class="col-head" x="40" y="35" text-anchor="middle">retraining</text>
+              <text class="col-head" x="110" y="26" text-anchor="middle">Written</text>
+              <text class="col-head" x="110" y="35" text-anchor="middle">reprimand</text>
+              <text class="col-head" x="170" y="26" text-anchor="middle">Unpaid</text>
+              <text class="col-head" x="170" y="35" text-anchor="middle">suspension</text>
+              <text class="col-head" x="230" y="31" text-anchor="middle">Demotion</text>
+              <text class="col-head" x="290" y="31" text-anchor="middle">Termination</text>
+
+              <line x1="80" y1="44" x2="80" y2="156" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="140" y1="44" x2="140" y2="156" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="200" y1="44" x2="200" y2="156" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="260" y1="44" x2="260" y2="156" stroke="var(--m-grid)" stroke-width="1"/>
+              <line x1="319" y1="44" x2="319" y2="156" stroke="var(--m-grid)" stroke-width="1"/>
+
+              <rect x="4" y="50" width="132" height="24" rx="7" fill="var(--m-teal-fill)" stroke="var(--m-teal-line)" stroke-width="1.5"/>
+              <text class="grp-eyebrow" x="70" y="66" text-anchor="middle" fill="var(--teal)">GROUP I</text>
+
+              <rect x="84" y="86" width="112" height="24" rx="7" fill="var(--m-yellow-fill)" stroke="var(--m-yellow-line)" stroke-width="1.5"/>
+              <text class="grp-eyebrow" x="140" y="102" text-anchor="middle" fill="var(--m-yellow-text)">GROUP II</text>
+
+              <rect x="144" y="122" width="172" height="24" rx="7" fill="var(--m-red-fill)" stroke="var(--m-red-line)" stroke-width="1.5"/>
+              <text class="grp-eyebrow" x="230" y="138" text-anchor="middle" fill="var(--m-red-text)">GROUP III</text>
+
+            </svg>
+          </div>
+
+          <p class="matrix-sub matrix-mid">The groups have general ranges for discipline so that employees are treated consistently. Supervisors making discipline decisions can also consider:</p>
+          <ul class="note-list matrix-list">
+            <li>The seriousness of the misconduct</li>
+            <li>Prior disciplinary history back to a certain point</li>
+            <li>Aggravating factors that may justify a harsher penalty. That could include dishonesty, harm to the public or repeated misconduct.</li>
+            <li>Mitigating factors that may support a lesser penalty. That could include accepting responsibility or lack of previous discipline.</li>
+          </ul>
+
+          <div class="matrix-scroll matrix-adjust matrix-scroll--wide">
+            <svg viewBox="0 0 860 120" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="Adjusting the penalty: from a starting range, mitigating factors such as accepting responsibility or lack of prior discipline pull the penalty lighter, and aggravating factors such as dishonesty, harm to the public or repeated misconduct push it harsher.">
+              <!-- Adjusting the penalty -->
+              <rect x="0" y="7" width="8" height="8" fill="var(--signal-yellow)"/>
+              <text class="m-kicker" x="16" y="16">ADJUSTING THE PENALTY</text>
+
+              <text class="zone-label" x="395" y="42" text-anchor="middle" fill="var(--teal)">MITIGATING FACTORS</text>
+              <text class="zone-label" x="550" y="42" text-anchor="middle">STARTING RANGE</text>
+              <text class="zone-label" x="705" y="42" text-anchor="middle" fill="var(--m-red-text)">AGGRAVATING FACTORS</text>
+
+              <defs>
+                <marker id="arw-mit" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="arrow-path" d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </marker>
+                <marker id="arw-agg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="arrow-path" d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </marker>
+              </defs>
+
+              <line class="factor-line" x1="538" y1="60" x2="288" y2="60" stroke="var(--teal)" stroke-width="2" marker-end="url(#arw-mit)"/>
+              <line class="factor-line" x1="562" y1="60" x2="812" y2="60" stroke="var(--m-red)" stroke-width="2" marker-end="url(#arw-agg)"/>
+              <circle class="range-dot" cx="550" cy="60" r="4.5" fill="var(--slate)"/>
+
+              <text class="factor-ex" x="395" y="86" text-anchor="middle">Accepting responsibility,</text>
+              <text class="factor-ex" x="395" y="101" text-anchor="middle">lack of prior discipline</text>
+              <text class="factor-ex" x="705" y="86" text-anchor="middle">Dishonesty, harm to the public,</text>
+              <text class="factor-ex" x="705" y="101" text-anchor="middle">repeated misconduct</text>
+            </svg>
+          </div>
+          <div class="matrix-scroll matrix-adjust matrix-scroll--narrow">
+            <svg viewBox="0 0 320 104" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="Adjusting the penalty: from a starting range, mitigating factors such as accepting responsibility pull the penalty lighter, and aggravating factors such as dishonesty or repeated misconduct push it harsher.">
+              <rect x="0" y="2" width="7" height="7" fill="var(--signal-yellow)"/>
+              <text class="m-kicker" x="12" y="9">ADJUSTING THE PENALTY</text>
+              <text class="zone-label" x="160" y="30" text-anchor="middle">STARTING RANGE</text>
+              <defs>
+                <marker id="arw-mit-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path class="arrow-path" d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </marker>
+                <marker id="arw-agg-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path class="arrow-path" d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </marker>
+              </defs>
+              <line class="factor-line" x1="150" y1="44" x2="22" y2="44" stroke="var(--teal)" stroke-width="2" marker-end="url(#arw-mit-n)"/>
+              <line class="factor-line" x1="170" y1="44" x2="298" y2="44" stroke="var(--m-red)" stroke-width="2" marker-end="url(#arw-agg-n)"/>
+              <circle class="range-dot" cx="160" cy="44" r="4" fill="var(--slate)"/>
+              <text class="zone-label" x="0" y="64" fill="var(--teal)">MITIGATING FACTORS</text>
+              <text class="zone-label" x="320" y="64" text-anchor="end" fill="var(--m-red-text)">AGGRAVATING FACTORS</text>
+              <text class="factor-ex" x="0" y="78">Accepting responsibility,</text>
+              <text class="factor-ex" x="0" y="89">lack of prior discipline</text>
+              <text class="factor-ex" x="320" y="78" text-anchor="end">Dishonesty, harm to the public,</text>
+              <text class="factor-ex" x="320" y="89" text-anchor="end">repeated misconduct</text>
+            </svg>
+          </div>
+
+          <p class="matrix-note">The Community Police Commission <a href="https://signalcleveland.org/cleveland-community-police-commission-approves-new-disciplinary-policy/" target="_blank" rel="noopener">approved revisions to the discipline policy in 2025</a>, including changes to how violations are grouped. The revised policy is still being negotiated and is not yet in effect.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== Grievance ===== -->
+  <section class="phase" id="stage-challenging">
+    <div class="beat-stack">
+      <p class="phase-label fade">Challenging discipline</p>
+      <p class="phase-lead fade subhead">How employees can challenge discipline</p>
+      <div class="phase-body phase-body--split">
+        <!-- Copy on the left, the grievance diagram on the right. The line
+             down out of the Grievance box is this stage's outgoing trunk,
+             drawn as an elbow (see data-trunk-elbow on the section); the
+             dotted branch to Settlement is drawn here in CSS. -->
+        <div class="challenge-grid">
+          <div class="challenge-diagram fade">
+            <div class="main-box grievance-box">
+              <h3>Grievance</h3>
+            </div>
+            <span class="settle-link" aria-hidden="true">
+              <span class="settle-line"></span>
+              <span class="settle-chevron"><svg viewBox="0 0 8 16" fill="none"><path d="M0 2L8 8L0 14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </span>
+            <div class="settle-box">Settlement</div>
+            <span class="arb-link" aria-hidden="true">
+              <span class="arb-line"></span>
+              <span class="arb-chevron"><svg viewBox="0 0 16 8" fill="none"><path d="M2 0L8 8L14 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </span>
+            <div class="main-box arb-box">
+              <h3>Arbitration</h3>
+            </div>
+          </div>
+          <div class="challenge-copy fade">
+            <p>An officer or other union-represented employee can challenge discipline by filing a grievance.</p>
+            <p>City and union officials review the dispute and may negotiate a settlement. If they cannot reach an agreement, the union may take the case to arbitration.</p>
+            <p>In arbitration, a neutral third party holds a hearing, reviews evidence and issues a written decision that both sides agree to follow. Only in rare instances can that be appealed to a local court.</p>
+            <p>It is unclear how often grievances lead to settlements or changes in discipline. Settlements and arbitration decisions are public records but are not published by the city like discipline decisions are.</p>
+          </div>
+        </div>
+
+        <p class="subhead cpc-subhead fade">Where the Community Police Commission fits in</p>
+        <div class="main-box cpc-box fade">
+          <h3>Direct appeal</h3>
+        </div>
+        <div class="phase-note cpc-copy fade">
+          <p>The city charter gives Cleveland&rsquo;s Community Police Commission final authority within city government over police discipline. Voters expanded its powers by passing Issue 24 in 2021.</p>
+          <p>The commission can order the chief and public safety director to impose or increase discipline and, in limited circumstances, decrease it.</p>
+          <p>A resident or officer who disagrees with a discipline decision can petition the commission for review. They can make the request at a public meeting, submit it in writing or ask a commissioner to submit it on their behalf.</p>
+          <p>Commission members publicly discuss and vote on whether to review a case. If they agree to proceed, the next step is to hear evidence.</p>
+          <p>How and when the commission can intervene remains disputed, in part because union contracts set deadlines for discipline. The unions argue that the commission&rsquo;s charter powers do not override state collective bargaining law.</p>
+          <p>The commission has proposed policy changes that would allow it to get involved earlier in discipline cases to address those timing disputes. The revised policy is not yet in effect.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/eesedla/CPD-discipline-process@main/flow.js"></script>

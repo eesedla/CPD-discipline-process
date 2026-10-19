@@ -74,6 +74,26 @@ BOOTJS;
 	1
 );
 
+/** Let the site masthead scroll away on this one article. */
+add_action(
+	'wp_head',
+	function () {
+		if ( ! cpd_discipline_flow_is_target() ) {
+			return;
+		}
+
+		$css = '#masthead, .site-header, .sticky-header, .site-header--sticky {'
+			. ' position: static !important; top: auto !important; }';
+
+		if ( function_exists( 'wp_print_inline_style_tag' ) ) {
+			wp_print_inline_style_tag( $css );
+		} else {
+			echo '<style>' . $css . '</style>';
+		}
+	},
+	2
+);
+
 /** The engine, after the markup. */
 add_action(
 	'wp_footer',

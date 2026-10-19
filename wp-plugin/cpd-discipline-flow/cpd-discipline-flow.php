@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CPD Discipline Flow
  * Description: Serves the scrollytelling explainer for the Cleveland police discipline piece. Loads only on the post that contains it, and nowhere else on the site.
- * Version:     1.2.0
+ * Version:     1.3.0
  * Author:      Emma Sedlak
  */
 
@@ -94,6 +94,35 @@ JS;
 );
 
 /**
+ * Let the site masthead scroll away on this one article.
+ *
+ * A masthead that stays pinned sits on top of every panel this explainer
+ * pins, taking a bite out of each stage for the whole read. Only on this
+ * post -- everywhere else on the site it behaves normally.
+ *
+ * The selectors below cover the usual names. If the masthead on this
+ * theme is called something else, add it to the list.
+ */
+add_action(
+	'wp_head',
+	function () {
+		if ( ! cpd_discipline_flow_is_target() ) {
+			return;
+		}
+
+		$css = '#masthead, .site-header, .sticky-header, .site-header--sticky {'
+			. ' position: static !important; top: auto !important; }';
+
+		if ( function_exists( 'wp_print_inline_style_tag' ) ) {
+			wp_print_inline_style_tag( $css );
+		} else {
+			echo '<style>' . $css . '</style>';
+		}
+	},
+	2
+);
+
+/**
  * The engine itself. In the footer, so the markup is already there -- though
  * it copes with the head too, and waits if it has to.
  */
@@ -108,7 +137,7 @@ add_action(
 			'cpd-discipline-flow',
 			plugins_url( 'flow.js', __FILE__ ),
 			array(),
-			'1.2.0',
+			'1.3.0',
 			true
 		);
 	}

@@ -27,6 +27,27 @@ document.documentElement.classList.add('viz-js');
 function vizFlowStart() {
 try {
 
+  // position: sticky quietly stops working if ANY ancestor between the
+  // pinned element and the scrollport has overflow set to anything but
+  // visible. Themes routinely put overflow-x: hidden on a page wrapper to
+  // stop sideways scroll, and that is enough to kill every pinned panel
+  // below it -- the stages then scroll straight past instead of holding
+  // while their beats build.
+  //
+  // Walk up from the explainer and open up only the ancestors that
+  // actually have it set. Nothing else on the page is touched, and an
+  // ancestor that was already visible is left alone.
+  (function freeStickyAncestors() {
+    var root = document.querySelector('.viz-container');
+    if (!root) { return; }
+    for (var n = root.parentElement; n && n !== document.documentElement; n = n.parentElement) {
+      var o = window.getComputedStyle(n);
+      if (o.overflowX !== 'visible' || o.overflowY !== 'visible') {
+        n.style.setProperty('overflow', 'visible', 'important');
+      }
+    }
+  })();
+
   // Draws the short elbow where each box in 'boxContainer' merges toward
   // center inside 'wrap', and returns a function that "draws" them in
   // (animates stroke-dashoffset to 0). Used for the entry phase, where

@@ -23,7 +23,8 @@
 <style>
   /* ============================================================
      EDIT HERE FIRST — all the brand knobs live here.
-     These are declared on the wrapper rather than on :root so that
+     These 
+     are declared on the wrapper rather than on :root so that
      names as ordinary as --ink or --radius cannot collide with the
      theme's own custom properties when this is inlined in a post.
      ============================================================ */
@@ -1309,7 +1310,11 @@
     }
     /* Stacked, the aside belongs in the flow between the external track and
        the chief's step, not parked over the column as it is on desktop. */
-    .criminal-anchor { height: auto; order: 0; }
+    /* The grid keeps align-items: start from its desktop rules, so as a
+       flex column it leaves anything with a width cap sitting against the
+       left edge. Stretching the anchor gives the note the full column to
+       centre its own max-width in. */
+    .criminal-anchor { height: auto; order: 0; align-self: stretch; }
     .criminal-note { position: static; }
     .public-again .entry-box { width: 100%; max-width: 340px; }
     /* The grids no longer cap themselves, so the boxes inside them keep

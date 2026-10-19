@@ -11,12 +11,14 @@
 // If anything in here throws, the beats would stay hidden and the page
 // would look empty. Dropping the js class hands it back to the plain,
 // fully visible rendering instead.
+// Tell the watchdog in the page that the engine parsed and is running.
+// If it was deferred past the watchdog's deadline the class has already
+// been dropped, so put it back and carry on animating.
+window.vizFlowStarted = true;
+document.documentElement.classList.add('viz-js');
+
+function vizFlowStart() {
 try {
-  // Tell the watchdog in the head that the engine parsed and is running.
-  // If it was deferred past the watchdog's deadline the class has already
-  // been dropped, so put it back and carry on animating.
-  window.vizFlowStarted = true;
-  document.documentElement.classList.add('viz-js');
 
   // Draws the short elbow where each box in 'boxContainer' merges toward
   // center inside 'wrap', and returns a function that "draws" them in
@@ -839,4 +841,14 @@ try {
 } catch (err) {
   document.documentElement.classList.remove('viz-js');
   if (window.console) console.error('discipline flow: falling back to the plain rendering', err);
+}
+}
+
+// Enqueued in the footer, the markup is already there and this runs now.
+// Enqueued in the head it is not, so wait for it rather than finding an
+// empty page and standing down. Either placement works.
+if (document.querySelector('.viz-container')) {
+  vizFlowStart();
+} else {
+  document.addEventListener('DOMContentLoaded', vizFlowStart);
 }

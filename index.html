@@ -17,14 +17,21 @@
      actually available. Without this class the page renders as a plain,
      fully visible document — see "Without JavaScript" in the stylesheet.
      The engine removes it again if it fails to start. */
-  document.documentElement.classList.add('js');
+  document.documentElement.classList.add('viz-js');
 </script>
 
 <style>
   /* ============================================================
-     EDIT HERE FIRST — all the brand knobs live in :root.
+     EDIT HERE FIRST — all the brand knobs live here.
+     These are declared on the wrapper rather than on :root so that
+     names as ordinary as --ink or --radius cannot collide with the
+     theme's own custom properties when this is inlined in a post.
+     The restyled .entry-header sits outside .viz-container, so it is
+     named here too; custom properties inherit to the descendants.
      ============================================================ */
-  :root {
+  .viz-container,
+  .site-main > .entry-header,
+  .site-main > .post-thumbnail {
     /* Signal palette */
     --signal-yellow: #f4c913;
     --teal:          #23685b;
@@ -46,9 +53,10 @@
     --radius:       14px;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .viz-container,
+  .viz-container * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
+  .viz-container {
     background: #ffffff;
     font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
@@ -147,6 +155,11 @@
     position: relative;
     z-index: 2;
     align-self: end;
+    /* The header is outside .viz-container, so it cannot inherit the
+       wrapper's face or its smoothing; name both here rather than
+       leaning on the theme's. */
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
     padding: 0 20px 40px;
     color: #fff;
     text-align: center;
@@ -1238,7 +1251,7 @@
      the fade-in transform below — so a beat still waiting to appear reads
      18px low and lines drawn to it land inside the box. layoutAll measures
      inside this class, where the transforms are off. ---------- */
-  html.is-measuring .fade {
+  html.viz-measuring .fade {
     transform: none !important;
     transition: none !important;
   }
@@ -1256,42 +1269,42 @@
      beat visible, the stages at their natural height, the two asides in
      the flow rather than overlaid, and the drawn connectors dropped, since
      they are decorative and are positioned by script. ---------- */
-  html:not(.js) .fade { opacity: 1; transform: none; }
-  html:not(.js) .phase { min-height: 0; }
-  html:not(.js) .beat-stack {
+  html:not(.viz-js) .fade { opacity: 1; transform: none; }
+  html:not(.viz-js) .phase { min-height: 0; }
+  html:not(.viz-js) .beat-stack {
     position: static;
     min-height: 0;
     padding: 28px 20px;
   }
-  html:not(.js) .criminal-anchor { height: auto; }
-  html:not(.js) .criminal-note,
-  html:not(.js) .phase-transient {
+  html:not(.viz-js) .criminal-anchor { height: auto; }
+  html:not(.viz-js) .criminal-note,
+  html:not(.viz-js) .phase-transient {
     position: static;
     max-width: 620px;
     margin: 18px auto 0;
   }
-  html:not(.js) .trunk-out,
-  html:not(.js) .trunk-in,
-  html:not(.js) .merge-svg-wrap svg,
-  html:not(.js) .exit-elbow-svg,
-  html:not(.js) .chief-links,
-  html:not(.js) .drop-link { display: none; }
+  html:not(.viz-js) .trunk-out,
+  html:not(.viz-js) .trunk-in,
+  html:not(.viz-js) .merge-svg-wrap svg,
+  html:not(.viz-js) .exit-elbow-svg,
+  html:not(.viz-js) .chief-links,
+  html:not(.viz-js) .drop-link { display: none; }
   /* The aside shares a grid cell with the chief's box, which only works
      while it is absolutely positioned. In the flow they would sit on top
      of each other, so the grid runs as a single column here and markup
      order carries the sequence. */
-  html:not(.js) .investigation-grid {
+  html:not(.viz-js) .investigation-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
-  html:not(.js) .investigation-grid > * {
+  html:not(.viz-js) .investigation-grid > * {
     grid-row: auto;
     grid-column: auto;
   }
-  html:not(.js) .settle-box { opacity: 1; transform: none; }
-  html:not(.js) .matrix .range-dot { transform: scale(1); }
-  html:not(.js) .matrix .arrow-path { opacity: 1; }
+  html:not(.viz-js) .settle-box { opacity: 1; transform: none; }
+  html:not(.viz-js) .matrix .range-dot { transform: scale(1); }
+  html:not(.viz-js) .matrix .arrow-path { opacity: 1; }
   .fade.is-visible { opacity: 1; transform: translateY(0); }
 
   /* A lead that doubles as a subheading takes the smaller subhead type. */
@@ -2526,14 +2539,14 @@ try {
   function layoutAll() {
     // Measure against the settled layout, not the pre-reveal offsets.
     const root = document.documentElement;
-    root.classList.add('is-measuring');
+    root.classList.add('viz-measuring');
     try {
       layoutTrunks();
       layoutAside();
       if (chiefLinks) chiefLinks.layout();
       elbows.forEach((e) => e.layout());
     } finally {
-      root.classList.remove('is-measuring');
+      root.classList.remove('viz-measuring');
     }
   }
   layoutAll();
@@ -2702,7 +2715,7 @@ try {
     show(0);
   })();
 } catch (err) {
-  document.documentElement.classList.remove('js');
+  document.documentElement.classList.remove('viz-js');
   if (window.console) console.error('discipline flow: falling back to the plain rendering', err);
 }
 </script>

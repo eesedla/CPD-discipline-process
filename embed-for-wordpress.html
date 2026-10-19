@@ -2,19 +2,16 @@
      Cleveland police discipline explainer - WordPress embed
      Paste EVERYTHING below into a single Custom HTML block.
 
-     The markup and the stylesheet are inline, so every word of the
+     There is deliberately no <script> in here. Post content is filtered
+     and re-encoded on its way to the page, and a single altered character
+     anywhere in a script kills all of it -- which is exactly what kept
+     happening. Everything executable is printed from PHP instead, by the
+     CPD Discipline Flow plugin (or the Code Snippets version of it).
+     Install one of those and this block needs nothing else.
+
+     The markup and stylesheet stay here, inline, so every word of the
      explainer is real text in the post and search engines and Google
-     Discover index it as part of the article. Only the animation engine
-     is loaded from a file.
-
-     That split is deliberate. Pasted inline, the engine kept arriving
-     corrupted -- "Uncaught SyntaxError: Invalid or unexpected token" --
-     because WordPress filters and re-encodes post content, and one bad
-     character anywhere in a script kills all of it. A src attribute is
-     not content, so nothing rewrites it.
-
-     If the engine ever fails to load, the page falls back on its own to
-     the plain, fully readable document. It never goes blank.
+     Discover index it as part of the article.
      ============================================================ -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1353,39 +1350,6 @@
   }
 </style>
 
-<script>
-  /* Set before first paint: the scrolly hides each beat until the engine
-     reveals it, so the hidden state is applied only when scripting is
-     actually available. Without this class the page renders as a plain,
-     fully visible document -- see "Without JavaScript" in the stylesheet.
-
-     The engine drops the class again if it throws. That only helps once
-     the engine has PARSED, though: paste this into a CMS that escapes or
-     strips inline script and the engine never runs at all, leaving every
-     beat hidden and the page apparently empty. So the fallback is armed
-     here instead, and the engine has to say it started. Deliberately free
-     of the characters a CMS is most likely to escape. */
-  document.documentElement.classList.add('viz-js');
-  // The engine is a separate file. If it fails to load -- blocked, moved,
-  // offline -- say so at once rather than leaving the stages blank until
-  // the timer below gives up on it.
-  window.addEventListener('error', function (e) {
-    var t = e.target;
-    if (t && t.tagName === 'SCRIPT' && !window.vizFlowStarted) {
-      document.documentElement.classList.remove('viz-js');
-    }
-  }, true);
-  window.setTimeout(function () {
-    if (window.vizFlowStarted) { return; }
-    document.documentElement.classList.remove('viz-js');
-    if (window.console) {
-      window.console.error('discipline flow: the engine never started -- '
-        + 'showing the plain rendering. The inline script was probably '
-        + 'altered or removed in transit.');
-    }
-  }, 4000);
-</script>
-
 <div class="viz-container">
 
   <!-- ===== Table of contents ===== -->
@@ -1847,5 +1811,3 @@
 
 
 </div>
-
-<script src="https://cdn.jsdelivr.net/gh/eesedla/CPD-discipline-process@main/flow.js"></script>

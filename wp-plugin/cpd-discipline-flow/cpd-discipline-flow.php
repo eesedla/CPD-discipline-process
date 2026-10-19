@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: CPD Discipline Flow
- * Description: Serves the scrollytelling engine for the Cleveland police discipline explainer. Loads only on the post that contains the explainer, and nowhere else on the site.
- * Version:     1.0.0
+ * Description: Serves the scrollytelling explainer for the Cleveland police discipline piece. Loads only on the post that contains it, and nowhere else on the site.
+ * Version:     1.1.0
  * Author:      Emma Sedlak
  */
 
@@ -12,24 +12,95 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * The explainer's markup and stylesheet are pasted into the post as a
- * Custom HTML block, so the text is part of the article. The engine cannot
- * go in with them: post content is filtered and re-encoded on its way to
- * the page, and a single altered character anywhere in a script kills all
- * of it. Served as a file it is left alone.
+ * Custom HTML block, so the text is part of the article and search engines
+ * index it normally. No script goes in with them: post content is filtered
+ * and re-encoded on its way to the page, and a single altered character
+ * anywhere in a script kills all of it. Everything executable is printed
+ * from PHP instead, which nothing rewrites.
  *
  * No post ID to keep in step -- this looks for the explainer's own wrapper
  * in the content, so it follows the post wherever it ends up, including
  * previews and any later republish.
  */
+function cpd_discipline_flow_is_target() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_post();
+
+	return $post && false !== strpos( $post->post_content, 'viz-container' );
+}
+
+/**
+ * Runs in the head, before the browser paints anything.
+ *
+ * This is what hides each beat until the engine reveals it. It has to land
+ * before first paint: set any later and the reader sees the whole explainer
+ * laid out flat for a moment, then watches it collapse into the scrolling
+ * version as the engine starts.
+ *
+ * It also arms the fallback. If the engine never arrives -- blocked, moved,
+ * failed -- the class comes off and the page renders as a plain, fully
+ * readable document rather than a blank space.
+ */
 add_action(
-	'wp_enqueue_scripts',
+	'wp_head',
 	function () {
-		if ( ! is_singular() ) {
+		if ( ! cpd_discipline_flow_is_target() ) {
 			return;
 		}
 
-		$post = get_post();
-		if ( ! $post || false === strpos( $post->post_content, 'viz-container' ) ) {
+		$boot = <<<'JS'
+			/* Set before first paint: the scrolly hides each beat until the engine
+			   reveals it, so the hidden state is applied only when scripting is
+			   actually available. Without this class the page renders as a plain,
+			   fully visible document -- see "Without JavaScript" in the stylesheet.
+			
+			   The engine drops the class again if it throws. That only helps once
+			   the engine has PARSED, though: paste this into a CMS that escapes or
+			   strips inline script and the engine never runs at all, leaving every
+			   beat hidden and the page apparently empty. So the fallback is armed
+			   here instead, and the engine has to say it started. Deliberately free
+			   of the characters a CMS is most likely to escape. */
+			document.documentElement.classList.add('viz-js');
+			// The engine is a separate file. If it fails to load -- blocked, moved,
+			// offline -- say so at once rather than leaving the stages blank until
+			// the timer below gives up on it.
+			window.addEventListener('error', function (e) {
+			  var t = e.target;
+			  if (t && t.tagName === 'SCRIPT' && !window.vizFlowStarted) {
+			    document.documentElement.classList.remove('viz-js');
+			  }
+			}, true);
+			window.setTimeout(function () {
+			  if (window.vizFlowStarted) { return; }
+			  document.documentElement.classList.remove('viz-js');
+			  if (window.console) {
+			    window.console.error('discipline flow: the engine never started -- '
+			      + 'showing the plain rendering. The inline script was probably '
+			      + 'altered or removed in transit.');
+			  }
+			}, 4000);
+JS;
+
+		if ( function_exists( 'wp_print_inline_script_tag' ) ) {
+			wp_print_inline_script_tag( $boot );
+		} else {
+			echo "<script>\n" . $boot . "\n</script>\n";
+		}
+	},
+	1
+);
+
+/**
+ * The engine itself. In the footer, so the markup is already there -- though
+ * it copes with the head too, and waits if it has to.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! cpd_discipline_flow_is_target() ) {
 			return;
 		}
 
@@ -37,8 +108,8 @@ add_action(
 			'cpd-discipline-flow',
 			plugins_url( 'flow.js', __FILE__ ),
 			array(),
-			'1.0.0',
-			true // Footer. The engine copes with the head too, but the markup is already here.
+			'1.1.0',
+			true
 		);
 	}
 );

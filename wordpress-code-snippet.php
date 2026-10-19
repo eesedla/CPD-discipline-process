@@ -1,38 +1,88 @@
 <?php
 /**
- * Cleveland police discipline explainer - animation engine.
+ * Cleveland police discipline explainer - WordPress, without the plugin.
  *
- * Paste this into a new snippet in the Code Snippets plugin, set it to
- * "Run everywhere" (or front-end only), and activate it.
+ * Paste this into a new snippet in the Code Snippets plugin, set it to run
+ * on the front end, and activate it. Use this only if you cannot install
+ * the plugin: it does the same job, but carries the engine inside PHP
+ * rather than serving it as a cacheable file.
  *
- * Use this version only if you cannot install the plugin or host a file.
- * It carries the whole engine in PHP, which is ugly but reliable: PHP
- * output never passes through the post-content filters that corrupt an
- * inline script, so nothing can rewrite it. It also means the page stops
- * depending on a third-party CDN.
+ * Why PHP at all: post content is filtered and re-encoded on its way to
+ * the page, and a single altered character anywhere in a script kills all
+ * of it. PHP output never passes through those filters.
  *
- * Once this is active, delete the <script src="..."> line from the bottom
- * of the post's HTML block. Leaving it in does no harm -- the engine
- * refuses to run twice -- but there is no reason to fetch it again.
- *
- * It loads only on a post that actually contains the explainer, found by
- * its own wrapper class, so there is no post ID to keep in step and
- * nothing is added to any other page on the site.
+ * The post's HTML block should contain no <script> of its own.
  */
 
+function cpd_discipline_flow_is_target() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_post();
+
+	return $post && false !== strpos( $post->post_content, 'viz-container' );
+}
+
+/** Hides each beat before the browser paints, and arms the fallback. */
+add_action(
+	'wp_head',
+	function () {
+		if ( ! cpd_discipline_flow_is_target() ) {
+			return;
+		}
+
+		$boot = <<<'BOOTJS'
+			/* Set before first paint: the scrolly hides each beat until the engine
+			   reveals it, so the hidden state is applied only when scripting is
+			   actually available. Without this class the page renders as a plain,
+			   fully visible document -- see "Without JavaScript" in the stylesheet.
+			
+			   The engine drops the class again if it throws. That only helps once
+			   the engine has PARSED, though: paste this into a CMS that escapes or
+			   strips inline script and the engine never runs at all, leaving every
+			   beat hidden and the page apparently empty. So the fallback is armed
+			   here instead, and the engine has to say it started. Deliberately free
+			   of the characters a CMS is most likely to escape. */
+			document.documentElement.classList.add('viz-js');
+			// The engine is a separate file. If it fails to load -- blocked, moved,
+			// offline -- say so at once rather than leaving the stages blank until
+			// the timer below gives up on it.
+			window.addEventListener('error', function (e) {
+			  var t = e.target;
+			  if (t && t.tagName === 'SCRIPT' && !window.vizFlowStarted) {
+			    document.documentElement.classList.remove('viz-js');
+			  }
+			}, true);
+			window.setTimeout(function () {
+			  if (window.vizFlowStarted) { return; }
+			  document.documentElement.classList.remove('viz-js');
+			  if (window.console) {
+			    window.console.error('discipline flow: the engine never started -- '
+			      + 'showing the plain rendering. The inline script was probably '
+			      + 'altered or removed in transit.');
+			  }
+			}, 4000);
+BOOTJS;
+
+		if ( function_exists( 'wp_print_inline_script_tag' ) ) {
+			wp_print_inline_script_tag( $boot );
+		} else {
+			echo "<script>\n" . $boot . "\n</script>\n";
+		}
+	},
+	1
+);
+
+/** The engine, after the markup. */
 add_action(
 	'wp_footer',
 	function () {
-		if ( ! is_singular() ) {
+		if ( ! cpd_discipline_flow_is_target() ) {
 			return;
 		}
 
-		$post = get_post();
-		if ( ! $post || false === strpos( $post->post_content, 'viz-container' ) ) {
-			return;
-		}
-
-		$engine = <<<'JS'
+		$engine = <<<'ENGINEJS'
 /* The discipline-flow scrolly engine.
  *
  * This lives in its own file on purpose. Pasted into a CMS as inline
@@ -896,10 +946,8 @@ if (document.querySelector('.viz-container')) {
 }
 
 })();
-JS;
+ENGINEJS;
 
-		// wp_print_inline_script_tag arrived in WordPress 5.7 and is the
-		// polite way in, since it respects any script filtering the site does.
 		if ( function_exists( 'wp_print_inline_script_tag' ) ) {
 			wp_print_inline_script_tag( $engine );
 		} else {

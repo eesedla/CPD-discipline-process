@@ -1,0 +1,352 @@
+HOW CLEVELAND POLICE DISCIPLINE WORKS
+Text for copy editing — Signal Cleveland
+Exported from the interactive explainer (index.html), 19 October 2026
+
+
+ABOUT THIS DOCUMENT
+===================
+
+This is every word of the interactive, in the order a reader meets it.
+Labels in [brackets] describe where the text sits on the page — they are
+not part of the copy.
+
+Two things to know before marking it up:
+
+1. The piece is a scrolling graphic, not an article. Short labels inside
+   boxes are deliberately terse and do not take closing periods.
+
+2. A few lines appear twice in the source, because the desktop and phone
+   layouts use different versions of the same chart. Those are flagged
+   with "(repeated — see ...)". Any change needs to be made in both
+   places; tell me and I will keep them in step.
+
+
+PAGE HEADER
+===========
+
+[kicker]
+Cleveland police discipline
+
+[headline]
+How Cleveland police discipline works
+
+[standfirst]
+The Cleveland police discipline process is complicated and involves quite
+a few steps. Here's a general overview of how it works.
+
+[line below standfirst]
+Scroll to follow the whole path, or jump to a stage.
+
+
+CONTENTS
+========
+
+[label]
+Contents
+
+[five jump-to cards: name, then the line beneath it]
+1. How a case begins — A complaint or report of misconduct
+2. Investigation — A supervisor, internal affairs or a civilian office
+3. Discipline hearing — Evidence weighed, discipline recommended
+4. Decision — Corrective action, from counseling to termination
+5. Challenging discipline — Grievance, arbitration and the police commission
+
+[link beneath the cards]
+Full, printable Cleveland police discipline flow chart
+
+
+STAGE 1 — HOW THE DISCIPLINE PROCESS STARTS
+===========================================
+
+[stage label]
+How the discipline process starts
+
+[stage lead]
+There's a complaint or report of misconduct. This can start with…
+
+[four boxes, left to right — no closing periods]
+A supervisor identifies a possible rule or policy violation
+Another officer or city employee reports possible misconduct
+Someone reports possible criminal misconduct
+A member of the public files a complaint
+
+[caption that appears under the boxes, then clears]
+Not every complaint or investigation leads to discipline.
+
+[second caption, replacing the first]
+Who reported the conduct and what it involves help determine who
+investigates.
+
+
+STAGE 2 — INVESTIGATION & REVIEW
+================================
+
+[stage label]
+Investigation & review
+
+[box, left track]
+Department investigation
+
+[copy under that box]
+Police supervisors investigate some lower-level policy violations, such as
+misuse of sick time or improper use of a body camera. The investigation
+moves through the chain of command to the police chief. At each step,
+supervisors review whether the alleged violations were properly identified
+and investigated. They can request more information, correct details or
+add, remove or change alleged violations.
+
+[on phones only, the public complaint box reappears here feeding the
+ right-hand track — repeated from stage 1]
+A member of the public files a complaint
+
+[box, right track]
+External investigation
+
+[copy under that box — "The Office of Professional Standards" is bold]
+The Office of Professional Standards, a civilian office outside the police
+department, investigates noncriminal complaints from members of the public.
+
+[continuing, same column — "Civilian Police Review Board" is bold]
+The Office of Professional Standards sends its findings and recommendations
+to the Civilian Police Review Board, an independent group of residents
+appointed by the mayor and City Council.
+
+The board reviews the investigation and makes its findings at a public
+meeting. Possible findings for each allegation include:
+
+   Sustained: The evidence supports the allegation.
+   Unfounded: The alleged conduct did not occur.
+   Insufficient evidence: There is not enough evidence to prove or
+   disprove the allegation.
+   Exonerated: The conduct occurred but did not violate policy.
+
+If the board finds a violation and recommends discipline, the employee gets
+an opportunity to respond at a discipline hearing.
+
+[subheading, centred below both tracks — appears, then clears]
+Internal Affairs Unit investigates possible crimes and more serious
+allegations of misconduct.
+
+[copy under that subheading]
+A prosecutor reviews the criminal investigation and decides whether to file
+charges.
+
+Criminal charges and department discipline are separate processes. An
+employee can face discipline for violating policy even if no criminal
+charges are filed. The discipline process can also proceed while criminal
+charges are pending.
+
+[box]
+Chief of Police review and charging letter
+
+[copy under that box]
+In most cases, the police chief reviews the investigation and decides how
+to proceed. If there is enough evidence of a policy violation, the chief
+may address it through verbal counseling or issue a "charging letter" to
+begin the formal discipline process.
+
+The letter outlines the city's account of what happened and the alleged
+policy violations.
+
+
+STAGE 3 — DISCIPLINARY HEARING
+==============================
+
+[stage label]
+Disciplinary hearing
+
+[box]
+Pre-disciplinary hearing
+
+[copy under the box]
+Before discipline is imposed, the employee can respond with evidence,
+defenses or witnesses. The employee can also waive the hearing.
+
+At a discipline hearing, a hearing officer — usually a deputy chief or
+assistant public safety director — reviews the evidence to decide whether
+it is more likely than not that misconduct occurred.
+
+
+STAGE 4 — DISCIPLINE DECISION
+=============================
+
+[stage label]
+Discipline decision
+
+[box]
+Corrective action
+
+[subheading]
+Who decides the consequences?
+
+[copy]
+If an employee is found to have violated policy, officials determine the
+consequence. The city calls this "corrective action," which includes both
+formal discipline and steps that are not considered discipline.
+
+The chief generally decides cases involving suspensions of 10 days or less.
+The public safety director decides cases that could result in longer
+suspensions or termination.
+
+["For complaints from the public" is bold]
+For complaints from the public, the Civilian Police Review Board recommends
+discipline to the chief. Under the city charter, the chief must follow the
+board's findings and recommendations unless there is clear and convincing
+evidence that they are clearly wrong. If the chief disagrees with the
+board's recommendation, they can make an argument to change it but the
+board can overrule that and order discipline imposed. The Community Police
+Commission can also decide to review the discipline.
+
+[heading above two lists]
+Types of discipline
+
+[list one]
+Non-disciplinary corrective action
+   Verbal counseling
+   Letter of reinstruction
+   Remedial training
+
+[list two]
+Formal discipline
+   Written reprimand
+   Unpaid suspension
+   Demotion
+   Termination
+
+
+THE DISCIPLINE MATRIX (chart)
+-----------------------------
+
+[chart headline]
+Violations are ranked in three groups with a sliding scale of consequences
+
+[chart subheading]
+The department uses a discipline matrix — a chart that sets penalty ranges
+for different violations — to guide these decisions.
+
+[labels across the top of the chart — repeated in the phone version of the
+ chart, so any change applies twice]
+NON-DISCIPLINARY
+FORMAL DISCIPLINE
+Counseling & retraining
+Written reprimand
+Unpaid suspension
+Demotion
+Termination
+
+[the three groups — repeated in the phone version, so any change applies
+ twice]
+GROUP I
+Less serious violations
+that generally have a limited impact on the department or public, such as
+tardiness, discourtesy or some reporting errors.
+
+GROUP II
+More serious violations
+that interfere with the department's mission or create significant risks to
+public or officer safety.
+
+GROUP III
+The most serious violations
+including serious abuses of authority, unethical conduct, excessive force,
+dishonesty, discrimination and some criminal offenses.
+
+[copy below the chart]
+The groups have general ranges for discipline so that employees are treated
+consistently. Supervisors making discipline decisions can also consider:
+
+   The seriousness of the misconduct
+   Prior disciplinary history back to a certain point
+   Aggravating factors that may justify a harsher penalty. That could
+   include dishonesty, harm to the public or repeated misconduct.
+   Mitigating factors that may support a lesser penalty. That could include
+   accepting responsibility or lack of previous discipline.
+
+
+ADJUSTING THE PENALTY (second chart)
+------------------------------------
+
+[all of the following is repeated in the phone version of this chart, so
+ any change applies twice]
+
+[chart label]
+ADJUSTING THE PENALTY
+
+[labels on the scale]
+MITIGATING FACTORS
+STARTING RANGE
+AGGRAVATING FACTORS
+
+[examples beneath each end]
+Accepting responsibility, lack of prior discipline
+Dishonesty, harm to the public, repeated misconduct
+
+[note below the chart — the first part is a link to Signal Cleveland's
+ story on the 2025 revisions]
+The Community Police Commission approved revisions to the discipline policy
+in 2025, including changes to how violations are grouped. The revised policy
+is still being negotiated and is not yet in effect.
+
+
+STAGE 5 — CHALLENGING DISCIPLINE
+================================
+
+[stage label]
+Challenging discipline
+
+[subheading]
+How employees can challenge discipline
+
+[three boxes in a small diagram: Grievance leads down to Arbitration, with
+ a dotted line out to the side to Settlement]
+Grievance
+Settlement
+Arbitration
+
+[copy beside the diagram]
+An officer or other union-represented employee can challenge discipline by
+filing a grievance.
+
+City and union officials review the dispute and may negotiate a settlement.
+If they cannot reach an agreement, the union may take the case to
+arbitration.
+
+In arbitration, a neutral third party holds a hearing, reviews evidence and
+issues a written decision that both sides agree to follow. Only in rare
+instances can that be appealed to a local court.
+
+It is unclear how often grievances lead to settlements or changes in
+discipline. Settlements and arbitration decisions are public records but are
+not published by the city like discipline decisions are.
+
+[subheading]
+Where the Community Police Commission fits in
+
+[box]
+Direct appeal
+
+[copy under the box]
+The city charter gives Cleveland's Community Police Commission final
+authority within city government over police discipline. Voters expanded its
+powers by passing Issue 24 in 2021.
+
+The commission can order the chief and public safety director to impose or
+increase discipline and, in limited circumstances, decrease it.
+
+A resident or officer who disagrees with a discipline decision can petition
+the commission for review. They can make the request at a public meeting,
+submit it in writing or ask a commissioner to submit it on their behalf.
+
+Commission members publicly discuss and vote on whether to review a case. If
+they agree to proceed, the next step is to hear evidence.
+
+How and when the commission can intervene remains disputed, in part because
+union contracts set deadlines for discipline. The unions argue that the
+commission's charter powers do not override state collective bargaining law.
+
+The commission has proposed policy changes that would allow it to get
+involved earlier in discipline cases to address those timing disputes. The
+revised policy is not yet in effect.
+
+
+END

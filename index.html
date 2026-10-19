@@ -15,7 +15,7 @@
   /* Set before first paint: the scrolly hides each beat until the engine
      reveals it, so the hidden state is applied only when scripting is
      actually available. Without this class the page renders as a plain,
-     fully visible document — see "Without JavaScript" in the stylesheet.
+     fully visible document -- see "Without JavaScript" in the stylesheet.
 
      The engine drops the class again if it throws. That only helps once
      the engine has PARSED, though: paste this into a CMS that escapes or
@@ -28,7 +28,7 @@
     if (window.vizFlowStarted) { return; }
     document.documentElement.classList.remove('viz-js');
     if (window.console) {
-      window.console.error('discipline flow: the engine never started — '
+      window.console.error('discipline flow: the engine never started -- '
         + 'showing the plain rendering. The inline script was probably '
         + 'altered or removed in transit.');
     }
@@ -1842,12 +1842,12 @@ try {
   window.vizFlowStarted = true;
   document.documentElement.classList.add('viz-js');
 
-  // Draws the short elbow where each box in `boxContainer` merges toward
-  // center inside `wrap`, and returns a function that "draws" them in
+  // Draws the short elbow where each box in 'boxContainer' merges toward
+  // center inside 'wrap', and returns a function that "draws" them in
   // (animates stroke-dashoffset to 0). Used for the entry phase, where
   // four boxes merge into one path forward. The continuous trunk line
   // that carries on from here down to the next phase is handled
-  // separately, in the `trunks` loop below — this is just the merge.
+  // separately, in the 'trunks' loop below -- this is just the merge.
   // Where each investigation track sits, as an x offset from the centre
   // of the sticky stack. Both the merge elbows and the trunks aim at
   // these, so the lines stay glued to the boxes at any width. When the
@@ -1888,7 +1888,7 @@ try {
 
       // Once the entry boxes wrap, this source sits near the middle of the
       // page and its line comes down on top of the next stage's label. Slide
-      // it along the box, away from the centre, until it is clear — staying
+      // it along the box, away from the centre, until it is clear -- staying
       // inside the box, which is why it lands off centre rather than in the
       // middle of it.
       // Not on a phone: there the tracks collapse onto the one centre line
@@ -1924,13 +1924,13 @@ try {
       // The entry boxes sit on one row on a wide screen but wrap below
       // about 940px, and a wrapped box lands directly under one that did
       // not wrap. So each box's line has to start at its own bottom edge
-      // and turn at a bar belonging to its own row — drawing every line
+      // and turn at a bar belonging to its own row -- drawing every line
       // from a single y below the whole grid leaves the upper row's boxes
       // with no visible riser and makes the wrapped box look as though it
       // feeds the merge the others share.
       // Group the boxes into rows. The grid centres each row, so boxes
       // sharing a row have different tops and bottoms when their text runs
-      // to a different number of lines — their centres are what match.
+      // to a different number of lines -- their centres are what match.
       const rows = [];
       boxes.forEach((box) => {
         const r = box.getBoundingClientRect();
@@ -1973,7 +1973,7 @@ try {
       const top = gridRect.top;
       const height = Math.max(gridRect.height + mergeHeight,
                               wrapRect.bottom - gridRect.top);
-      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
       svg.style.height = height + 'px';
       svg.style.width = width + 'px';
       svg.style.left = (gridRect.left - wrapRect.left) + 'px';
@@ -1994,8 +1994,10 @@ try {
         // Down from the box, across on its row's bar, then down to the
         // trunk. On a single row the last leg has no length, so this draws
         // exactly what it always did.
-        p.setAttribute('d', `M ${boxCenterX} ${startY} L ${boxCenterX} ${barY}`
-          + ` L ${endX} ${barY} L ${endX} ${height}`);
+        p.setAttribute('d', 'M ' + boxCenterX + ' ' + startY
+          + ' L ' + boxCenterX + ' ' + barY
+          + ' L ' + endX + ' ' + barY
+          + ' L ' + endX + ' ' + height);
         p.setAttribute('class', 'merge-path');
         svg.appendChild(p);
         paths.push(p);
@@ -2026,7 +2028,7 @@ try {
   // phase's remaining height scrolls underneath it. Because the beats
   // stop moving once stuck, we can't rely on IntersectionObserver (it
   // only fires when a target's position relative to the viewport
-  // changes) — instead we track how far the reader has scrolled through
+  // changes) -- instead we track how far the reader has scrolled through
   // each phase and reveal one beat per step of that progress. Once
   // revealed, a beat stays visible, so by the final step all of a
   // phase's beats sit stacked together in the center.
@@ -2042,7 +2044,7 @@ try {
 
   // How much scroll each beat is worth. A phone screen is short, so the
   // desktop allowance of 55vh a beat means better than half a screen of
-  // scrolling before anything moves — the whole stage runs five screens
+  // scrolling before anything moves -- the whole stage runs five screens
   // long and the boxes arrive late. Narrow screens get a tighter pace.
   function beatHeight(count) {
     const narrow = isNarrow();
@@ -2052,7 +2054,7 @@ try {
   }
 
   // Collected so layoutAll can re-measure them with the .fade transforms
-  // neutralised — these read each box's own bottom edge, which a part-played
+  // neutralised -- these read each box's own bottom edge, which a part-played
   // reveal would otherwise shift.
   const convergences = [];
 
@@ -2063,7 +2065,7 @@ try {
     // A .fade is a beat unless it sits inside another .fade, which keeps a
     // revealed block from being split into beats by accident; .beat--nested
     // opts one back in. Beats then run in markup order, unless they carry
-    // data-beat-order — needed where the markup cannot express the order,
+    // data-beat-order -- needed where the markup cannot express the order,
     // as with copy nested in an earlier block that should reveal later.
     const boxItems = boxContainer
       ? Array.from(boxContainer.querySelectorAll('.fade')).filter((el) =>
@@ -2102,7 +2104,7 @@ try {
         trunkState.active = on;
         if (!on) return;
         // The trunks draw straight into the investigation boxes, so land the
-        // whole arrival on this beat — heading, lead and boxes — instead of
+        // whole arrival on this beat -- heading, lead and boxes -- instead of
         // letting it wait for its own stage to start. Otherwise the lines
         // arrive at nothing, and the heading turns up after the boxes it
         // introduces.
@@ -2119,7 +2121,7 @@ try {
       }]);
     } else {
       // The line leaves from under whatever in the phase body sits on the
-      // center line — the main box, or a note/exit box stacked below it.
+      // center line -- the main box, or a note/exit box stacked below it.
       if (boxContainer && phase.querySelector('.main-box')) {
         trunkState.start = boxContainer;
         beats.push([(on) => { trunkState.active = on; }]);
@@ -2138,7 +2140,7 @@ try {
   });
 
   // One two-piece trunk per gap between phases (none after the last
-  // phase) — see the .trunk-out / .trunk-in CSS for how the pieces fit.
+  // phase) -- see the .trunk-out / .trunk-in CSS for how the pieces fit.
   // Stages taller than the screen (e.g. Corrective action, with the
   // matrix) would otherwise pin at top: 0 with their lower half hidden
   // below the fold until release. A negative sticky top lets such a stack
@@ -2418,7 +2420,7 @@ try {
     layout();
     return {
       layout,
-      // Drawn or undrawn, following the box it points at — which stands
+      // Drawn or undrawn, following the box it points at -- which stands
       // down again when the reader scrolls back above its beat.
       set(on) {
         if (on === revealed) return;
@@ -2444,7 +2446,7 @@ try {
   }
 
   // Park the aside directly under the internal column's copy. Everything
-  // below it there — the chief's box, the board copy opposite — reserves
+  // below it there -- the chief's box, the board copy opposite -- reserves
   // its space from the start but is still hidden at that point, so the
   // aside borrows the band and hands it back when it clears.
   function layoutAside() {
@@ -2561,7 +2563,7 @@ try {
     });
 
     // An element can bow out when a later beat lands rather than when its
-    // own does — keyed to is-live, so scrolling back up brings it in again.
+    // own does -- keyed to is-live, so scrolling back up brings it in again.
     if (isNarrow()) {
       document.querySelectorAll('[data-fade-out-narrow]').forEach((el) => {
         const trigger = document.querySelector(el.dataset.fadeOutNarrow);
@@ -2606,7 +2608,7 @@ try {
   update();
 
   // Table of contents: jump to a stage, landing a little way inside it
-  // so its first beat is already revealed — a plain anchor jump would
+  // so its first beat is already revealed -- a plain anchor jump would
   // land on a sticky stack at progress 0, i.e. an empty screen (see
   // update, which reveals beats by scroll progress through the phase).
   document.querySelectorAll('.toc-card').forEach((link) => {
@@ -2617,7 +2619,7 @@ try {
       event.preventDefault();
       // Beats normally build one per step of scroll progress, so a jump
       // would land on the stage's kicker alone. Reveal the opening beats
-      // up front — update() only ever adds is-visible, so the rest of the
+      // up front -- update() only ever adds is-visible, so the rest of the
       // stage still builds from here as the reader scrolls on.
       target.querySelectorAll(
         ':scope > .beat-stack > .phase-label,' +

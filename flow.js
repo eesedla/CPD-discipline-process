@@ -14,6 +14,13 @@
 // Tell the watchdog in the page that the engine parsed and is running.
 // If it was deferred past the watchdog's deadline the class has already
 // been dropped, so put it back and carry on animating.
+(function () {
+
+// Loaded twice -- the post still carries its own script tag and the site
+// enqueues the file as well, say -- would build every connector a second
+// time on top of the first. Once is enough.
+if (window.vizFlowStarted) { return; }
+
 window.vizFlowStarted = true;
 document.documentElement.classList.add('viz-js');
 
@@ -852,3 +859,5 @@ if (document.querySelector('.viz-container')) {
 } else {
   document.addEventListener('DOMContentLoaded', vizFlowStart);
 }
+
+})();

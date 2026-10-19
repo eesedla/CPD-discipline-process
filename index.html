@@ -16,8 +16,23 @@
      reveals it, so the hidden state is applied only when scripting is
      actually available. Without this class the page renders as a plain,
      fully visible document — see "Without JavaScript" in the stylesheet.
-     The engine removes it again if it fails to start. */
+
+     The engine drops the class again if it throws. That only helps once
+     the engine has PARSED, though: paste this into a CMS that escapes or
+     strips inline script and the engine never runs at all, leaving every
+     beat hidden and the page apparently empty. So the fallback is armed
+     here instead, and the engine has to say it started. Deliberately free
+     of the characters a CMS is most likely to escape. */
   document.documentElement.classList.add('viz-js');
+  window.setTimeout(function () {
+    if (window.vizFlowStarted) { return; }
+    document.documentElement.classList.remove('viz-js');
+    if (window.console) {
+      window.console.error('discipline flow: the engine never started — '
+        + 'showing the plain rendering. The inline script was probably '
+        + 'altered or removed in transit.');
+    }
+  }, 2000);
 </script>
 
 <style>
@@ -1821,6 +1836,12 @@
 // would look empty. Dropping the js class hands it back to the plain,
 // fully visible rendering instead.
 try {
+  // Tell the watchdog in the head that the engine parsed and is running.
+  // If it was deferred past the watchdog's deadline the class has already
+  // been dropped, so put it back and carry on animating.
+  window.vizFlowStarted = true;
+  document.documentElement.classList.add('viz-js');
+
   // Draws the short elbow where each box in `boxContainer` merges toward
   // center inside `wrap`, and returns a function that "draws" them in
   // (animates stroke-dashoffset to 0). Used for the entry phase, where

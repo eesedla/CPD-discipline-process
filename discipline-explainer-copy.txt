@@ -1,6 +1,6 @@
 HOW CLEVELAND POLICE DISCIPLINE WORKS
 Text for copy editing — Signal Cleveland
-Exported from the interactive explainer (index.html), 19 October 2026
+Exported from the interactive explainer (index.html), 27 October 2026
 
 
 ABOUT THIS DOCUMENT
@@ -46,7 +46,8 @@ Contents
 
 [five jump-to cards: name, then the line beneath it]
 1. How a case begins — A complaint or report of misconduct
-2. Investigation — A supervisor, internal affairs or a civilian office
+2. Investigation — Conducted by supervisor, internal affairs or a civilian
+   office
 3. Discipline hearing — Evidence weighed, discipline recommended
 4. Decision — Corrective action, from counseling to termination
 5. Challenging discipline — Grievance, arbitration and the police commission
@@ -82,18 +83,18 @@ STAGE 2 — INVESTIGATION & REVIEW
 ================================
 
 [stage label]
-Investigation & review
+Investigation and review
 
 [box, left track]
 Department investigation
 
 [copy under that box]
-Police supervisors investigate some lower-level policy violations, such as
-misuse of sick time or improper use of a body camera. The investigation
-moves through the chain of command to the police chief. At each step,
-supervisors review whether the alleged violations were properly identified
-and investigated. They can request more information, correct details or
-add, remove or change alleged violations.
+Supervisors investigate and record facts, findings and applicable policy
+violations. Cases enter discipline-tracking software and move through the
+chain of command to the police chief or safety director. At each step,
+supervisors review whether the alleged violations were properly identified and
+investigated. They can request more information, correct details, or add,
+remove or change alleged violations.
 
 [on phones only, the public complaint box reappears here feeding the
  right-hand track — repeated from stage 1]
@@ -131,22 +132,31 @@ allegations of misconduct.
 A prosecutor reviews the criminal investigation and decides whether to file
 charges.
 
-Criminal charges and department discipline are separate processes. An
-employee can face discipline for violating policy even if no criminal
-charges are filed. The discipline process can also proceed while criminal
-charges are pending.
+Criminal charges and department discipline must be handled separately. An
+employee can face discipline for violating policy even if no criminal charges
+are filed. The discipline process can also proceed while criminal charges are
+pending.
 
 [box]
 Chief of Police review and charging letter
 
 [copy under that box]
-In most cases, the police chief reviews the investigation and decides how
-to proceed. If there is enough evidence of a policy violation, the chief
-may address it through verbal counseling or issue a "charging letter" to
-begin the formal discipline process.
+In most cases, the police chief reviews the investigation and decides whether
+the evidence supports the violation. The most serious violations go directly
+to the safety director.
 
-The letter outlines the city's account of what happened and the alleged
-policy violations.
+The case can be sent back for more investigation if something was missed. At
+this point, lower-level misconduct may be resolved with verbal counseling.
+Those cases never enter the formal disciplinary process.
+
+The chief or safety director begins the formal disciplinary process by sending
+the case to the Case Preparation Office. That office schedules the pre-
+disciplinary hearing and sends a “charge letter” to the employee that outlines
+the city's account and the alleged policy violations.
+
+Under the collective bargaining agreement, discipline must be issued within 90
+days of the original hearing notice. After 90 days, no discipline can be
+imposed.
 
 
 STAGE 3 — DISCIPLINARY HEARING
@@ -162,9 +172,10 @@ Pre-disciplinary hearing
 Before discipline is imposed, the employee can respond with evidence,
 defenses or witnesses. The employee can also waive the hearing.
 
-At a discipline hearing, a hearing officer — usually a deputy chief or
-assistant public safety director — reviews the evidence to decide whether
-it is more likely than not that misconduct occurred.
+The hearing officer — usually a deputy chief or assistant public safety
+director — reviews the evidence to decide whether it is more likely than not
+that misconduct occurred. For complaints from the public, the Civilian Police
+Review Board presents its findings and recommendations to the hearing officer.
 
 
 STAGE 4 — DISCIPLINE DECISION
@@ -188,14 +199,16 @@ The chief generally decides cases involving suspensions of 10 days or less.
 The public safety director decides cases that could result in longer
 suspensions or termination.
 
-["For complaints from the public" is bold]
-For complaints from the public, the Civilian Police Review Board recommends
-discipline to the chief. Under the city charter, the chief must follow the
-board's findings and recommendations unless there is clear and convincing
-evidence that they are clearly wrong. If the chief disagrees with the
-board's recommendation, they can make an argument to change it but the
-board can overrule that and order discipline imposed. The Community Police
-Commission can also decide to review the discipline.
+["For Civilian Police Review Board cases" is bold]
+For Civilian Police Review Board cases, the chief must follow the board's
+findings and recommendations, under the city charter. If the chief disagrees
+with the review board, they send what's called a “departure memo” explaining
+their reasoning. That could be a misread policy or a conflicting General
+Police Order.
+
+Then, the board rehears the case, considering the memo, and issues its final
+decision. The board's decision is final, and the chief must issue that
+discipline.
 
 [heading above two lists]
 Types of discipline
@@ -249,7 +262,8 @@ public or officer safety.
 GROUP III
 The most serious violations
 including serious abuses of authority, unethical conduct, excessive force,
-dishonesty, discrimination and some criminal offenses.
+dishonesty, discrimination and some criminal offenses. All Group 3 cases go to
+the Safety Director.
 
 [copy below the chart]
 The groups have general ranges for discipline so that employees are treated
@@ -307,9 +321,11 @@ Arbitration
 An officer or other union-represented employee can challenge discipline by
 filing a grievance.
 
-City and union officials review the dispute and may negotiate a settlement.
-If they cannot reach an agreement, the union may take the case to
-arbitration.
+The city has a labor relations office, which considers the grievance arguments
+and consults with the law department on a potential resolution, called a
+settlement.
+
+If they cannot reach an agreement, the union may take the case to arbitration.
 
 In arbitration, a neutral third party holds a hearing, reviews evidence and
 issues a written decision that both sides agree to follow. Only in rare

@@ -448,16 +448,22 @@ try {
   // stage's trunk-in. Replaces the straight .trunk-out for that gap.
   function buildExitElbow(phase, selector) {
     const stack = phase.querySelector(':scope > .beat-stack');
-    const from = phase.querySelector(selector);
+    // Both investigation tracks leave this stage for the hearing, so the
+    // selector may name more than one. Each gets its own elbow down to a
+    // shared turn, and from there they run as one line into the next stage.
+    const sources = Array.from(phase.querySelectorAll(selector));
     const body = phase.querySelector('.phase-body');
-    if (!stack || !from || !body) return null;
+    if (!stack || !sources.length || !body) return null;
     const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('class', 'exit-elbow-svg');
     svg.setAttribute('aria-hidden', 'true');
-    const path = document.createElementNS(ns, 'path');
-    path.setAttribute('class', 'exit-elbow');
-    svg.appendChild(path);
+    const paths = sources.map(function () {
+      const el = document.createElementNS(ns, 'path');
+      el.setAttribute('class', 'exit-elbow');
+      svg.appendChild(el);
+      return el;
+    });
     stack.appendChild(svg);
 
     function layout() {
@@ -466,23 +472,47 @@ try {
       svg.setAttribute('viewBox', '0 0 ' + s.width + ' ' + s.height);
       svg.style.width = s.width + 'px';
       svg.style.height = s.height + 'px';
-      const f = from.getBoundingClientRect();
       const b = body.getBoundingClientRect();
-      const x = f.left + f.width / 2 - s.left;
-      const startY = f.bottom - s.top + 10;
       const turnY = b.bottom - s.top + 24;   // clear of the exit branch
       const cx = s.width / 2;
-      path.setAttribute('d', 'M ' + x + ' ' + startY + ' L ' + x + ' ' + turnY
-        + ' L ' + cx + ' ' + turnY + ' L ' + cx + ' ' + s.height);
-      const len = path.getTotalLength();
-      path.style.strokeDasharray = len;
-      if (path.style.strokeDashoffset !== '0px' && path.style.strokeDashoffset !== '0') {
-        path.style.strokeDashoffset = len;
+
+      // A phone stacks the tracks one above the other, so only whichever
+      // ends up lowest can run a line down from its own bottom; from any
+      // of the others it would go straight through everything beneath it.
+      // There the single centre line out of the last block is the whole
+      // story. Chosen by measuring rather than by document order, which
+      // does not match the order they end up in on screen.
+      let lowest = 0;
+      if (isNarrow()) {
+        let bottom = -Infinity;
+        sources.forEach(function (from, i) {
+          const y = from.getBoundingClientRect().bottom;
+          if (y > bottom) { bottom = y; lowest = i; }
+        });
       }
+
+      sources.forEach(function (from, i) {
+        const path = paths[i];
+        if (isNarrow() && i !== lowest) {
+          path.style.display = 'none';
+          return;
+        }
+        path.style.display = '';
+        const f = from.getBoundingClientRect();
+        const x = f.left + f.width / 2 - s.left;
+        const startY = f.bottom - s.top + 10;
+        path.setAttribute('d', 'M ' + x + ' ' + startY + ' L ' + x + ' ' + turnY
+          + ' L ' + cx + ' ' + turnY + ' L ' + cx + ' ' + s.height);
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        if (path.style.strokeDashoffset !== '0px' && path.style.strokeDashoffset !== '0') {
+          path.style.strokeDashoffset = len;
+        }
+      });
     }
 
     layout();
-    return { layout, path };
+    return { layout, paths };
   }
 
   const elbows = [];
@@ -522,7 +552,7 @@ try {
       const elbow = buildExitElbow(from.el, elbowFrom);
       if (elbow) {
         elbows.push(elbow);
-        pieces.push(elbow.path);
+        elbow.paths.forEach(function (p) { pieces.push(p); });
       }
     }
     from.trunkState.pieces = pieces;
@@ -603,24 +633,17 @@ try {
       }
 
       // Straight down out of the copy above, stopping short of the box so
-      // the arrow sits clear of its edge, plus one in from the external
-      // column across the gutter.
+      // the arrow sits clear of its edge. Only the department track feeds
+      // the chief's review: the external track carries on to the hearing
+      // instead, which the exit elbow draws.
       // Measured from the internal column itself: the box's previous sibling
       // is the phone-only connector, which is hidden here and measures zero.
       const aboveY = cols[0].getBoundingClientRect().bottom - b.top;
-      const rightX = boxRect.right - b.left;
-      const midY = topY + boxRect.height / 2;
-      const outerX = cols[1].getBoundingClientRect().left - b.left;
 
       const tipY = topY - CLEAR;
       add('M ' + boxX + ' ' + (aboveY + 8) + ' L ' + boxX + ' ' + tipY,
           'M ' + (boxX - HEAD) + ' ' + (tipY - HEAD) + ' L ' + boxX + ' '
             + tipY + ' L ' + (boxX + HEAD) + ' ' + (tipY - HEAD));
-
-      const tipX = rightX + CLEAR;
-      add('M ' + (outerX - 6) + ' ' + midY + ' L ' + tipX + ' ' + midY,
-          'M ' + (tipX + HEAD) + ' ' + (midY - HEAD) + ' L ' + tipX + ' '
-            + midY + ' L ' + (tipX + HEAD) + ' ' + (midY + HEAD));
     }
 
     layout();

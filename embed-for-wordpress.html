@@ -276,7 +276,15 @@
   .phase--junction-in > .beat-stack {
     justify-content: flex-start;
     padding-top: 2vh;
+    /* This stage runs the longest and is the one that overflows a laptop
+       screen, which pushes the two investigation boxes up off the top once
+       the panel pins. Trimming the foot of the stack and the gaps between
+       its rows buys back enough to keep them in view, without touching the
+       type. Not below 4vh: the outgoing elbow turns 24px under the body
+       and needs to stay inside the stack. */
+    padding-bottom: 4vh;
   }
+  .phase--junction-in .investigation-grid { row-gap: 14px; }
 
   .phase-label {
     font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif;
@@ -1510,8 +1518,7 @@
             <h3>Chief of Police review and charging letter</h3>
           </div>
           <div class="chief-copy fade beat--nested beat--reversible" data-beat-order="5">
-            <p>In most cases, the police chief reviews the investigation and decides whether the evidence supports the violation. The most serious violations go directly to the safety director.</p>
-            <p>The case can be sent back for more investigation if something was missed. At this point, lower-level misconduct may be resolved with verbal counseling. Those cases never enter the formal disciplinary process.</p>
+            <p>In most cases, the police chief reviews the investigation and decides whether the evidence supports the violation. The most serious violations go directly to the safety director. The case can be sent back for more investigation if something was missed. At this point, lower-level misconduct may be resolved with verbal counseling. Those cases never enter the formal disciplinary process.</p>
             <p>The chief or safety director begins the formal disciplinary process by sending the case to the Case Preparation Office. That office schedules the pre-disciplinary hearing and sends a &ldquo;charge letter&rdquo; to the employee that outlines the city&rsquo;s account and the alleged policy violations.</p>
             <p>Under the collective bargaining agreement, discipline must be issued within 90 days of the original hearing notice. After 90 days, no discipline can be imposed.</p>
           </div>

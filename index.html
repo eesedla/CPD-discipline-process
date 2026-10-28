@@ -6,10 +6,15 @@
 <title>How a misconduct complaint moves through police discipline</title>
 
 <!-- Brand faces are loaded from Google Fonts as stand-ins.
-     Swap these for Signal's real licensed faces when you have them. -->
+     Swap these for Signal's real licensed faces when you have them.
+
+     Only the weights the stylesheet actually sets are asked for. Inside
+     the Signal post the theme loads Inter as well, as a variable font, so
+     this request is a duplicate there; if the theme's own Inter can be
+     relied on, dropping it from here saves the whole download. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
 
 <script>
   /* Set before first paint: the scrolly hides each beat until the engine

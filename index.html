@@ -862,6 +862,17 @@
     pointer-events: auto;
     margin-bottom: 8px;
   }
+  /* The aside and the chief's box share a grid row on purpose: the aside
+     is zero-height with its note lifted out of the flow, and the two never
+     show at once. Dropping back into the flow breaks that bargain -- the
+     aside takes real height and lands on top of the chief's box in the
+     same cell. So here it gets a row of its own, and everything below it
+     moves down one. The external column stops spanning, or it would still
+     be sitting in the aside's row. */
+  .phase.is-unpaced .inv-col--external { grid-row: 1; }
+  .phase.is-unpaced .investigation-grid .criminal-anchor { grid-row: 2; }
+  .phase.is-unpaced .investigation-grid .chief-box { grid-row: 3; }
+  .phase.is-unpaced .investigation-grid .chief-copy { grid-row: 4; }
   .criminal-note .subhead,
   .phase-note .subhead { margin-bottom: 14px; }
   .criminal-note p:not(.subhead) {
@@ -946,9 +957,11 @@
   /* ---------- Discipline matrix (Corrective action stage). Its colors
      are scoped here as --m-* so they don't override the page palette. ---------- */
   .matrix {
-    /* The chart inside has a min-width so its labels stay legible; without
-       this it would widen the whole stage instead of scrolling on its own. */
     min-width: 0;
+    /* Measured against this box, not the window. Inside a post the article
+       column can be far narrower than the screen, so a window-width rule
+       would keep the wide chart long after it stopped fitting. */
+    container-type: inline-size;
     --m-teal-fill:   #daeae5;
     --m-teal-line:   #51a89a;
     --m-yellow-fill: #fbf0c8;
@@ -991,10 +1004,15 @@
   .matrix-scroll--wide svg {
     display: block;
     width: 100%;
-    min-width: 700px;   /* the wide chart would be unreadable squeezed down */
+    /* The wide chart wants 700px to stay legible, but never more than it
+       has been given: a hard min-width made it overflow its box and the
+       chart picked up a sideways scrollbar, which also clipped the group
+       labels off the left. Capped at 100%, overflow is impossible. */
+    min-width: min(700px, 100%);
   }
   /* The narrow chart is drawn to fit, so it never needs to scroll. */
   .matrix-scroll--narrow { display: none; }
+
 
   /* Type in an SVG is sized in user units, so the labels set for the
      860-unit chart come out far too large in the 320-unit one. */
@@ -1045,6 +1063,20 @@
     display: block;
     width: 100%;
     min-width: 0;
+  }
+
+  /* Swap to the chart drawn to fit, with the group descriptions above it
+     as running text, as soon as the wide one no longer has its 700px.
+     Measured against the chart's own box, so it holds in a narrow article
+     column on a wide screen, where a window-width rule sees nothing wrong.
+     This sits after the display rules above on purpose: a container query
+     adds no specificity, so source order is what settles it. The
+     window-width rules further down cover browsers without container
+     query support. */
+  @container (max-width: 699px) {
+    .matrix-scroll--wide { display: none; }
+    .matrix-scroll--narrow { display: block; }
+    .matrix-key { display: block; }
   }
   .matrix svg text { font-family: var(--font-display); }
   .matrix .m-kicker {

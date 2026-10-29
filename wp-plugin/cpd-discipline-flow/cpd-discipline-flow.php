@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CPD Discipline Flow
  * Description: Serves the scrollytelling explainer for the Cleveland police discipline piece. Loads only on the post that contains it, and nowhere else on the site.
- * Version:     1.5.2
+ * Version:     1.5.3
  * Author:      Emma Sedlak
  */
 
@@ -144,7 +144,7 @@ add_action(
 			'cpd-discipline-flow',
 			plugins_url( 'flow.js', __FILE__ ),
 			array(),
-			file_exists( $engine ) ? (string) filemtime( $engine ) : '1.5.2',
+			file_exists( $engine ) ? (string) filemtime( $engine ) : '1.5.3',
 			true
 		);
 	}

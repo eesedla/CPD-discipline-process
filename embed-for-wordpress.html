@@ -782,6 +782,10 @@
   }
   .phase.is-unpaced .phase-transient + .phase-transient { margin-top: 10px; }
 
+  /* With the captions back in the flow the wrap ends where the text does,
+     leaving the merge nowhere to draw. Give it back the band it had. */
+  .phase.is-unpaced .merge-svg-wrap { padding-bottom: 26px; }
+
   /* The two investigation tracks and the notes under them share one grid,
      so each box sits squarely over its column of text. The middle column
      carries the Internal Affairs note, between the two tracks. */
@@ -1319,30 +1323,9 @@
     .phase-lead { font-size: 1.5em; }
     .main-box, .exit-box, .appeal-box, .entry-box { width: 100%; max-width: 340px; }
 
-    /* Stacked, the boxes are spaced with margins rather than a grid gap, so
-       that a box which steps aside takes its spacing with it and everything
-       below closes up into the space. */
+    /* Stacked, the boxes are spaced with margins rather than a grid gap. */
     .entry-grid { gap: 0; }
     .entry-grid .entry-box + .entry-box { margin-top: 14px; }
-    .entry-box[data-fade-out-narrow] {
-      overflow: hidden;
-      max-height: 300px;
-      transition: opacity 0.45s ease, transform 0.45s ease,
-                  max-height 0.45s ease, margin-top 0.45s ease,
-                  padding-top 0.45s ease, padding-bottom 0.45s ease,
-                  border-top-width 0.45s ease, border-bottom-width 0.45s ease;
-    }
-    .entry-box.is-collapsed {
-      max-height: 0;
-      margin-top: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-      border-top-width: 0;
-      border-bottom-width: 0;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .entry-box[data-fade-out-narrow] { transition: none; }
-    }
     /* Stacked, the markup order is already the sequence we want: internal
        track, the public complaint rejoining, external track, the criminal
        aside, then the chief's step. */
@@ -1477,7 +1460,7 @@
     </nav>
 
     <p class="toc-download">
-      <a href="https://signalcleveland.org/wp-content/uploads/2026/10/police-discipline-flowchart-FINAL.pdf" target="_blank" rel="noopener">Full, printable Cleveland police discipline flow chart</a>
+      <a href="https://signalcleveland.org/wp-content/uploads/2026/10/police-discipline-flowchart-oct29.pdf" target="_blank" rel="noopener">Full, printable Cleveland police discipline flow chart</a>
     </p>
 
 
@@ -1495,11 +1478,11 @@
         <div class="entry-box fade" data-route="internal">A supervisor identifies a possible rule or policy violation</div>
         <div class="entry-box fade" data-route="internal">Another officer or city employee reports possible misconduct</div>
         <div class="entry-box fade" data-route="internal">Someone reports possible criminal misconduct</div>
-        <!-- On a phone this box rejoins further down, above the external
-             track, so it steps aside once the second caption lands — a beat
-             before the trunk sets off. -->
-        <div class="entry-box fade" data-route="external"
-             data-fade-out-narrow=".caption--last">A member of the public files a complaint</div>
+        <!-- On a phone this box also appears further down, above the external
+             track, since the stacked column cannot show a line running down
+             beside the others. It stays put here: closing it as the reader
+             drew level with it read as the page snatching it away. -->
+        <div class="entry-box fade" data-route="external">A member of the public files a complaint</div>
       </div>
       <div class="merge-svg-wrap">
         <p class="phase-transient fade beat--transient">Not every complaint or investigation leads to discipline</p>

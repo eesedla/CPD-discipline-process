@@ -179,6 +179,20 @@ try {
       const top = gridRect.top;
       const height = Math.max(gridRect.height + mergeHeight,
                               wrapRect.bottom - gridRect.top);
+
+      // A stage that reveals by view keeps its captions in the flow, inside
+      // this wrap and above the merge. A line drawn from the boxes would run
+      // behind them, and the opaque ground they need in order to read would
+      // break it into pieces. So it starts under them instead: the text sits
+      // in the gap the boxes used to connect across, and the line picks up
+      // below it. While the stage is paced the captions are out of the flow
+      // and this is 0, which draws exactly what it always did.
+      let floorY = 0;
+      if (wrap.closest('.phase').classList.contains('is-unpaced')) {
+        wrap.querySelectorAll('.phase-transient').forEach((caption) => {
+          floorY = Math.max(floorY, caption.getBoundingClientRect().bottom - top);
+        });
+      }
       svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
       svg.style.height = height + 'px';
       svg.style.width = width + 'px';
@@ -192,8 +206,9 @@ try {
         const boxRect = box.getBoundingClientRect();
         const boxCenterX = boxRect.left + boxRect.width / 2 - gridRect.left;
         const row = rowFor(boxRect);
-        const startY = (stacked ? gridRect.bottom : boxRect.bottom) - top;
-        const barY = row.bottom - top + dropFor(row);
+        const startY = Math.max((stacked ? gridRect.bottom : boxRect.bottom) - top,
+                                floorY);
+        const barY = Math.max(row.bottom - top + dropFor(row), floorY);
         const route = box.dataset.route;
         const endX = centerX + ((targets && route && targets[route]) || 0);
         const p = document.createElementNS(ns, 'path');
@@ -813,30 +828,6 @@ try {
       });
     });
 
-    // An element can bow out when a later beat lands rather than when its
-    // own does -- keyed to is-live, so scrolling back up brings it in again.
-    if (isNarrow()) {
-      document.querySelectorAll('[data-fade-out-narrow]').forEach((el) => {
-        const trigger = document.querySelector(el.dataset.fadeOutNarrow);
-        const gone = !!(trigger && trigger.classList.contains('is-live'));
-        if (gone) el.classList.remove('is-visible');
-        // It collapses as well as fading, so the trunk and everything under
-        // it close up into the space rather than leaving a hole. The lines
-        // are measured from layout, so they are re-measured once the box has
-        // finished moving (see the transitionend hook below).
-        const was = el.classList.contains('is-collapsed');
-        el.classList.toggle('is-collapsed', gone);
-        // That hook is a transitionend, and with Reduce Motion turned on
-        // this box has no transition to end: it collapses in one go and
-        // nothing re-measures. The grid closes up, the drawn lines stay
-        // where they were, and the trunk is left with a break the height of
-        // this box. Re-measuring on the change itself covers that. When the
-        // box does animate, this reads the layout it already had and costs
-        // nothing -- the transitionend still corrects it once it settles.
-        if (was !== gone) layoutAll();
-      });
-    }
-
     phases.forEach(({ trunkState }) => {
       if (trunkState.pieces) {
         const on = !!trunkState.active;
@@ -853,20 +844,6 @@ try {
       }
     });
   }
-
-  // Collapsing a box changes where everything below it sits, so the
-  // connectors are re-measured once that transition has finished.
-  document.querySelectorAll('[data-fade-out-narrow]').forEach((el) => {
-    // transitionend alone is not enough: scrolling back up reverses the
-    // collapse while it is still running, and an interrupted transition
-    // fires transitioncancel instead -- leaving the lines measured against
-    // a layout that has since moved.
-    ['transitionend', 'transitioncancel'].forEach((type) => {
-      el.addEventListener(type, (event) => {
-        if (event.propertyName === 'max-height') layoutAll();
-      });
-    });
-  });
 
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate);

@@ -763,6 +763,25 @@
     pointer-events: none;
   }
 
+  /* The two captions share one spot on purpose: each takes the other's
+     place as its beat lands, and keeping them out of the flow means the
+     stack never shifts when one goes. That bargain depends on the
+     hand-off, and the hand-off only runs while the stage is paced -- a
+     stage that reveals by view instead latches every beat on, and the two
+     print on top of each other. So here they drop back into the flow and
+     read as two lines, on an opaque ground so the merge line passes
+     behind them rather than through, as .phase-label does with the trunk. */
+  .phase.is-unpaced .phase-transient {
+    position: relative;
+    top: auto;
+    z-index: 2;
+    width: fit-content;
+    padding: 3px 12px;
+    background: #ffffff;
+    pointer-events: auto;
+  }
+  .phase.is-unpaced .phase-transient + .phase-transient { margin-top: 10px; }
+
   /* The two investigation tracks and the notes under them share one grid,
      so each box sits squarely over its column of text. The middle column
      carries the Internal Affairs note, between the two tracks. */
@@ -900,6 +919,15 @@
   @media (prefers-reduced-motion: reduce) {
     .chief-link, .chief-head { transition: none; }
   }
+  /* Drawn for the paced layout, where the aside is lifted out of the flow
+     and the chief's box sits directly under the internal column, a short
+     step below it. Unpaced, the aside drops into the flow and takes a row
+     of its own between the two, so this line stretches the length of the
+     stage and runs straight through the aside's copy on its way down. It
+     is decorative -- the narrow layout drops it for the same reason -- and
+     the boxes still read in order down the page without it. */
+  .phase.is-unpaced .chief-links { display: none; }
+
   .cprb-note p,
   .cprb-note li {
     font-size: 13.5px;

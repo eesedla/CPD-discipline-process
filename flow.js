@@ -380,7 +380,23 @@ try {
     }
   }
   fitStacks();
-  window.addEventListener('resize', fitStacks);
+  // A phone's browser slides its own chrome in and out as the reader
+  // scrolls, and every change fires resize with a window 60-90px shorter
+  // or taller. Re-fitting on those rewrites each stage's height in the
+  // middle of the read: an 84px change moves the document by about 400px
+  // and drags the content out from under the reader's finger. It bites
+  // hardest scrolling up, which is where the toolbar keeps coming back.
+  // On a touch device the only resize worth re-fitting for is one that
+  // changes the width -- a rotation. A pointer device has no such chrome,
+  // so there every resize is deliberate and is honoured as before.
+  const touchChrome = window.matchMedia('(pointer: coarse)');
+  let lastWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    const widthChanged = window.innerWidth !== lastWidth;
+    lastWidth = window.innerWidth;
+    if (!widthChanged && touchChrome.matches) return;
+    fitStacks();
+  });
   if (document.fonts) document.fonts.ready.then(fitStacks);
 
   // Discipline matrix: draw the mitigating/aggravating lines once the
@@ -420,13 +436,19 @@ try {
       });
     }
 
-    new IntersectionObserver((entries) => {
-      onScreen = entries[entries.length - 1].isIntersecting;
-      play();
-    }, { threshold: 0.3 }).observe(svgs[0]);
-    svgs.slice(1).forEach((el) => {
+    // There are two of these charts -- one drawn wide, one drawn to fit --
+    // and only ever one of them is displayed at a given width. The other is
+    // display:none, which can never intersect anything, so letting a single
+    // chart speak for all of them leaves the hidden one reporting "off
+    // screen" over the one actually being read. Tracking which are on
+    // screen lets the hidden chart simply never join in.
+    const showing = new Set();
+    svgs.forEach((el) => {
       new IntersectionObserver((entries) => {
-        if (entries[entries.length - 1].isIntersecting) { onScreen = true; play(); }
+        if (entries[entries.length - 1].isIntersecting) showing.add(el);
+        else showing.delete(el);
+        onScreen = showing.size > 0;
+        play();
       }, { threshold: 0.3 }).observe(el);
     });
     new MutationObserver(play).observe(matrix, { attributes: true, attributeFilter: ['class'] });
@@ -802,7 +824,16 @@ try {
         // it close up into the space rather than leaving a hole. The lines
         // are measured from layout, so they are re-measured once the box has
         // finished moving (see the transitionend hook below).
+        const was = el.classList.contains('is-collapsed');
         el.classList.toggle('is-collapsed', gone);
+        // That hook is a transitionend, and with Reduce Motion turned on
+        // this box has no transition to end: it collapses in one go and
+        // nothing re-measures. The grid closes up, the drawn lines stay
+        // where they were, and the trunk is left with a break the height of
+        // this box. Re-measuring on the change itself covers that. When the
+        // box does animate, this reads the layout it already had and costs
+        // nothing -- the transitionend still corrects it once it settles.
+        if (was !== gone) layoutAll();
       });
     }
 
@@ -826,8 +857,14 @@ try {
   // Collapsing a box changes where everything below it sits, so the
   // connectors are re-measured once that transition has finished.
   document.querySelectorAll('[data-fade-out-narrow]').forEach((el) => {
-    el.addEventListener('transitionend', (event) => {
-      if (event.propertyName === 'max-height') layoutAll();
+    // transitionend alone is not enough: scrolling back up reverses the
+    // collapse while it is still running, and an interrupted transition
+    // fires transitioncancel instead -- leaving the lines measured against
+    // a layout that has since moved.
+    ['transitionend', 'transitioncancel'].forEach((type) => {
+      el.addEventListener(type, (event) => {
+        if (event.propertyName === 'max-height') layoutAll();
+      });
     });
   });
 
